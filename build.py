@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the course index website from data/course.yaml.
 
-    python3 build.py            # writes site/index.html and copies files/
+    python3 build.py            # writes site/index.html, a page per video (site/1.1/6/) and copies files/
 
 Nothing else to configure: edit the YAML, run this, and the page is rebuilt.
 
@@ -12,6 +12,7 @@ build after it shows the Watch button.
 import datetime as dt
 import html
 import pathlib
+import re
 import shutil
 import sys
 
@@ -75,8 +76,9 @@ def example_row(sec, ex):
     title = e(ex["title"])
     res = "".join(chip(r) for r in ex.get("resources") or [])
     if is_posted(ex):
-        name = f'<a class="ex-title" href="{e(ex["video"])}" target="_blank" rel="noopener">{title}</a>'
-        action = (f'<a class="watch" href="{e(ex["video"])}" target="_blank" rel="noopener" '
+        page = page_path(sec, ex)
+        name = f'<a class="ex-title" href="{e(page)}">{title}</a>'
+        action = (f'<a class="watch" href="{e(page)}" '
                   f'aria-label="Watch Example {ex["n"]}: {title}">{ICONS["play"]}<span>Watch</span></a>')
         state = "posted"
     else:
@@ -138,17 +140,128 @@ def build():
     top_links += [chip(r) for r in c.get("resources") or []]
 
     page = TEMPLATE.format(
-        title=e(c["title"]), tagline=e(c["tagline"]), author=e(c.get("author", "")),
+        base_css=BASE_CSS, title=e(c["title"]), tagline=e(c["tagline"]), author=e(c.get("author", "")),
         links="".join(top_links), toc=toc, posted=posted, total=len(all_ex),
         chapters="".join(chapter_block(ch) for ch in chapters),
     )
-    OUT.mkdir(exist_ok=True)
+    if OUT.exists():
+        shutil.rmtree(OUT)  # so a page for a removed link doesn't linger
+    OUT.mkdir()
     (OUT / "index.html").write_text(page)
+
+    # One clean page per example that has a video link (scheduled ones say "Coming Nov 2").
+    order = [(s, x) for ch in chapters for s in ch.get("sections") or [] for x in s.get("examples") or []]
+    pages = 0
+    for i, (sec, ex) in enumerate(order):
+        if not ex.get("video"):
+            continue
+        prev = order[i - 1] if i else None
+        nxt = order[i + 1] if i + 1 < len(order) else None
+        d = OUT / page_path(sec, ex)
+        d.mkdir(parents=True)
+        (d / "index.html").write_text(video_page(sec, ex, prev, nxt))
+        pages += 1
     files = ROOT / "files"
     if files.exists():
         shutil.copytree(files, OUT / "files", dirs_exist_ok=True)
     (OUT / ".nojekyll").write_text("")
-    print(f"Built site/index.html: {len(chapters)} chapter(s), {len(all_ex)} examples, {posted} videos posted")
+    print(f"Built site/index.html: {len(chapters)} chapter(s), {len(all_ex)} examples, {posted} videos posted, {pages} video pages")
+
+
+BASE_CSS = """/* Clean Teal, matched to the slides: flat white cards on a cool gray page,
+   bold teal titles, muted letter-spaced eyebrows, outlined teal part circles. */
+:root {
+  --bg:#F3F5F8; --card:#FFFFFF; --text:#1F2633; --muted:#8A93A3; --line:#E6EAF0;
+  --teal:#1F7A8C; --teal-ink:#FFFFFF; --coral:#D9573B; --pending:#C3CAD5;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#141A21; --card:#1D252F; --text:#E7EBF1; --muted:#8A93A3; --line:#2A333F;
+          --teal:#4DB3C6; --teal-ink:#0E1A20; --coral:#EC7A5F; --pending:#4A5463; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:16px/1.5 Arial, "Helvetica Neue", Helvetica, sans-serif; }
+a { color:var(--teal); }"""
+
+
+VIDEO_TEMPLATE = """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title} · Section {sec} Example {n}</title>
+<meta name="description" content="Video walkthrough of Example {n} in Section {sec} of OpenStax College Algebra 2e: {title}.">
+<style>
+{base_css}
+.wrap {{ max-width:960px; margin:0 auto; padding:28px 16px 48px; }}
+.eyebrow {{ font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:700; }}
+h1 {{ font-size:clamp(22px,4vw,30px); line-height:1.2; margin:6px 0 18px; color:var(--teal); }}
+.player {{ position:relative; aspect-ratio:16/9; border-radius:10px; overflow:hidden; background:#000;
+  box-shadow:0 1px 3px rgba(31,38,51,.12); }}
+.player iframe {{ position:absolute; inset:0; width:100%; height:100%; border:0; }}
+.player.soon {{ background:var(--card); display:grid; place-items:center; color:var(--muted); font-size:18px; }}
+nav.steps {{ display:flex; justify-content:space-between; gap:16px; margin-top:18px; }}
+nav.steps a {{ text-decoration:none; max-width:48%; }}
+nav.steps a:hover .t {{ text-decoration:underline; }}
+nav.steps .k {{ display:block; font-size:13px; color:var(--muted); font-weight:700; }}
+nav.steps .t {{ display:block; color:var(--teal); font-weight:700; }}
+nav.steps .next {{ text-align:right; margin-left:auto; }}
+.quiet {{ margin-top:22px; font-size:14px; color:var(--muted); }}
+.quiet a {{ color:var(--muted); }}
+@media (max-width:560px) {{ nav.steps a {{ max-width:none; }} nav.steps {{ flex-direction:column; }} nav.steps .next {{ text-align:left; margin-left:0; }} }}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Section {sec} · Example {n}</div>
+  <h1>{title}</h1>
+  {player}
+  <nav class="steps">{prev}{next}</nav>
+  <p class="quiet"><a href="{home}#{anchor}">All examples</a>{yt}</p>
+</div>
+</body>
+</html>
+"""
+
+
+def video_id(url):
+    m = re.search(r"(?:v=|youtu\.be/|embed/)([\w-]{11})", url or "")
+    return m.group(1) if m else None
+
+
+def page_path(sec, ex):
+    """Where an example's video page lives, relative to the site root."""
+    return f'{sec["number"]}/{ex["n"]}/'
+
+
+def step_link(kind, item, here):
+    """A Previous or Next link: to the neighbor's video page if it has one, else to its row on the index."""
+    if not item:
+        return ""
+    sec, ex = item
+    href = here + (page_path(sec, ex) if ex.get("video") else f'#{slug("ex", sec["number"], ex["n"])}')
+    label = "Previous" if kind == "prev" else "Next"
+    return (f'<a class="{kind}" href="{e(href)}"><span class="k">{"← " if kind == "prev" else ""}{label} · '
+            f'{e(sec["number"])} Example {ex["n"]}{" →" if kind == "next" else ""}</span>'
+            f'<span class="t">{e(ex["title"])}</span></a>')
+
+
+def video_page(sec, ex, prev, nxt):
+    home = "../../"
+    vid = video_id(ex.get("video"))
+    title = e(ex["title"])
+    if is_posted(ex) and vid:
+        player = (f'<div class="player"><iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" '
+                  f'title="{title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; '
+                  f'picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>')
+        yt = f' · <a href="https://www.youtube.com/watch?v={vid}" target="_blank" rel="noopener">Watch on YouTube</a>'
+    else:
+        t = public_at(ex)
+        player = f'<div class="player soon">Coming {f"{t:%b} {t.day}" if t else "soon"}</div>'
+        yt = ""
+    return VIDEO_TEMPLATE.format(
+        base_css=BASE_CSS, title=title, sec=e(sec["number"]), n=ex["n"], player=player, home=home,
+        anchor=slug("ex", sec["number"], ex["n"]), yt=yt,
+        prev=step_link("prev", prev, home), next=step_link("next", nxt, home))
 
 
 TEMPLATE = """<!doctype html>
@@ -159,20 +272,8 @@ TEMPLATE = """<!doctype html>
 <title>{title}</title>
 <meta name="description" content="{tagline}">
 <style>
-/* Clean Teal, matched to the slides: flat white cards on a cool gray page,
-   bold teal titles, muted letter-spaced eyebrows, outlined teal part circles. */
-:root {{
-  --bg:#F3F5F8; --card:#FFFFFF; --text:#1F2633; --muted:#8A93A3; --line:#E6EAF0;
-  --teal:#1F7A8C; --teal-ink:#FFFFFF; --coral:#D9573B; --pending:#C3CAD5;
-}}
-@media (prefers-color-scheme: dark) {{
-  :root {{ --bg:#141A21; --card:#1D252F; --text:#E7EBF1; --muted:#8A93A3; --line:#2A333F;
-          --teal:#4DB3C6; --teal-ink:#0E1A20; --coral:#EC7A5F; --pending:#4A5463; }}
-}}
-* {{ box-sizing:border-box; }}
+{base_css}
 html {{ scroll-behavior:smooth; }}
-body {{ margin:0; background:var(--bg); color:var(--text); font:16px/1.5 Arial, "Helvetica Neue", Helvetica, sans-serif; }}
-a {{ color:var(--teal); }}
 .wrap {{ max-width:880px; margin:0 auto; padding:0 16px 64px; }}
 header {{ padding:44px 0 18px; }}
 .eyebrow, .ch-label, .sec-eyebrow {{ font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:700; }}

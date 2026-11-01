@@ -7,7 +7,7 @@ A static website listing every College Algebra 2e example video in textbook orde
 | File | What it does |
 |---|---|
 | `data/course.yaml` | **The only file that changes day to day.** Chapters → sections → examples, with video links and resources. |
-| `build.py` | Turns the data file into `site/index.html`. |
+| `build.py` | Turns the data file into `site/index.html`, plus a clean page per video (`site/1.1/6/`): the YouTube embed, Previous and Next links, and a link back to the index. |
 | `sync_youtube.py` | Fills in video links from the course playlist. |
 | `add_resource.py` | Attaches a study guide, worksheet, slides, or link to a chapter, section, or example. |
 | `files/` | PDFs and other files the site links to (e.g. `files/ch1/1.1-study-guide.pdf`). |
@@ -62,6 +62,7 @@ Change `build.py` once. Every page picks up the change on the next build.
 
 ## Good to know
 
+- **Video pages:** every example with a video link has its own page, e.g. `.../1.1/6/`. The index's Watch buttons open it. A scheduled video's page says "Coming Nov 11" until it goes public. Previous and Next stand in for YouTube's end screen, which doesn't reliably show in embedded players.
 - **Deep links:** every example has its own address, e.g. `.../#ex-1-1-6`, and every section too (`#sec-1-2`). Study guides or video descriptions can point straight to a spot on the page.
 - **Feed limit:** YouTube's playlist feed shows the newest 15 videos. A nightly run covers that as long as fewer than 15 videos post in a day. For bulk uploads, run the workflow between batches, or switch the sync to the YouTube Data API, which uses a free key.
 - **Tested live 2026-11-01:** the sync matched 1.1 Ex 1 from the real playlist feed.
