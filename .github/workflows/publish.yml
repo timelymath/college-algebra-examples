@@ -1,0 +1,64 @@
+# Rebuilds and publishes the site:
+#   - every time anything is pushed to main (a new study guide, a fix, ...)
+#   - every night at 3:17 am Eastern, after checking the playlist for new videos
+#   - every day at 15:17 UTC, so a video scheduled for 15:00 UTC shows its
+#     Watch button within about 20 minutes of going public
+#   - on demand from the Actions tab ("Run workflow")
+name: Sync and publish
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 7 * * *"   # 07:17 UTC
+    - cron: "17 15 * * *"  # 15:17 UTC, just after scheduled releases
+  workflow_dispatch:
+
+permissions:
+  contents: write    # lets the nightly sync save new video links
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+
+      - name: Pick up newly posted videos
+        if: github.event_name != 'push'
+        run: python sync_youtube.py
+
+      - name: Save any new links back to the data file
+        if: github.event_name != 'push'
+        run: |
+          if ! git diff --quiet data/course.yaml; then
+            git config user.name  "course-site bot"
+            git config user.email "actions@users.noreply.github.com"
+            git commit -am "Add newly posted video links"
+            git push
+          fi
+
+      - run: python build.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
