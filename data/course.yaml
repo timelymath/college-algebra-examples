@@ -75,6 +75,8 @@ chapters:
     - n: 13
       title: Simplifying a Formula
 
+      video: https://youtu.be/WcDaoys7dBY
+      public_at: "2026-11-26T15:00:00Z"
   - number: "1.2"
     title: Exponents and Scientific Notation
     textbook_url: https://openstax.org/books/college-algebra-2e/pages/1-2-exponents-and-scientific-notation
