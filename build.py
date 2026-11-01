@@ -296,8 +296,11 @@ VIEWER_SCRIPT = """<script>
 
 
 def slides_for(sec, ex):
-    """The example's published slides (files/<section>/<n>/slides.json from tools/public_deck.py), or None."""
+    """The example's published slides (files/<section>/<n>/slides.json from tools/public_deck.py), or None.
+    They show only once the video is public, so a scheduled video's slides can be uploaded ahead of time."""
     p = ROOT / "files" / str(sec["number"]) / str(ex["n"]) / "slides.json"
+    if not is_posted(ex):
+        return None
     return json.loads(p.read_text()) if p.exists() else None
 
 
