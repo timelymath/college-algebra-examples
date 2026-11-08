@@ -98,13 +98,13 @@ def section_block(sec):
     exs = sec.get("examples") or []
     posted = sum(1 for x in exs if is_posted(x))
     book = ""
-    if sec.get("textbook_url"):
-        book = (f'<a class="chip quiet" href="{e(sec["textbook_url"])}" target="_blank" rel="noopener">'
-                f'{ICONS["book"]}<span>Read the section</span></a>')
     if sec.get("playlist_url"):
         book += chip({"kind": "video", "label": "Section playlist", "url": sec["playlist_url"]})
     if sec.get("review"):
         book += chip({"kind": "video", "label": "Section review video", "url": sec["review"]})
+    if sec.get("textbook_url"):
+        book += (f'<a class="chip quiet" href="{e(sec["textbook_url"])}" target="_blank" rel="noopener">'
+                 f'{ICONS["book"]}<span>Read the section</span></a>')
     rows = "".join(example_row(sec, x) for x in exs)
     pct = round(100 * posted / len(exs)) if exs else 0
     return f'''
@@ -219,15 +219,21 @@ h1 {{ font-size:clamp(22px,4vw,30px); line-height:1.2; margin:6px 0 18px; color:
   box-shadow:0 1px 3px rgba(31,38,51,.12); }}
 .player iframe {{ position:absolute; inset:0; width:100%; height:100%; border:0; }}
 .player.soon {{ background:var(--card); display:grid; place-items:center; color:var(--muted); font-size:18px; }}
-nav.steps {{ display:flex; justify-content:space-between; gap:16px; margin-top:18px; }}
-nav.steps a {{ text-decoration:none; max-width:48%; }}
-nav.steps a:hover .t {{ text-decoration:underline; }}
-nav.steps .k {{ display:block; font-size:13px; color:var(--muted); font-weight:700; }}
-nav.steps .t {{ display:block; color:var(--teal); font-weight:700; }}
-nav.steps .next {{ text-align:right; margin-left:auto; }}
+nav.steps {{ display:flex; justify-content:space-between; gap:16px; margin-top:20px; }}
+.step {{ display:flex; align-items:center; gap:14px; flex:0 1 48%; min-width:0; text-decoration:none; background:var(--card);
+  border:1.5px solid var(--line); border-radius:10px; padding:14px 16px; box-shadow:0 1px 2px rgba(31,38,51,.06);
+  transition:border-color .15s, box-shadow .15s, transform .15s; }}
+.step:hover {{ border-color:var(--teal); box-shadow:0 3px 10px rgba(31,38,51,.12); transform:translateY(-1px); }}
+.step:focus-visible {{ outline:2px solid var(--teal); outline-offset:2px; }}
+.step .arrow {{ flex:none; width:40px; height:40px; border-radius:50%; display:grid; place-items:center; background:var(--teal); color:#fff; }}
+.step .arrow svg {{ width:18px; height:18px; }}
+.step .txt {{ min-width:0; }}
+.step .k {{ display:block; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; }}
+.step .t {{ display:block; color:var(--teal); font-weight:700; margin-top:2px; }}
+.step.next {{ flex-direction:row-reverse; text-align:right; margin-left:auto; }}
 .quiet {{ margin-top:22px; font-size:14px; color:var(--muted); }}
 .quiet a {{ color:var(--muted); }}
-@media (max-width:560px) {{ nav.steps a {{ max-width:none; }} nav.steps {{ flex-direction:column; }} nav.steps .next {{ text-align:left; margin-left:0; }} }}
+@media (max-width:560px) {{ nav.steps {{ flex-direction:column; }} .step {{ flex-basis:auto; }} }}
 .res {{ margin-top:36px; padding-top:22px; border-top:1px solid var(--line); scroll-margin-top:16px; }}
 .res-head {{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px; }}
 .res h2 {{ font-size:20px; margin:0; color:var(--teal); }}
@@ -274,10 +280,13 @@ def step_link(kind, item, here):
         return ""
     sec, ex = item
     href = here + (page_path(sec, ex) if ex.get("video") else f'#{slug("ex", sec["number"], ex["n"])}')
-    label = "Previous" if kind == "prev" else "Next"
-    return (f'<a class="{kind}" href="{e(href)}"><span class="k">{"← " if kind == "prev" else ""}{label} · '
-            f'{e(sec["number"])} Example {ex["n"]}{" →" if kind == "next" else ""}</span>'
-            f'<span class="t">{e(ex["title"])}</span></a>')
+    label = "Previous example" if kind == "prev" else "Next example"
+    arrow = ('<svg viewBox="0 0 16 16" aria-hidden="true"><path d="' + ("M10 3L5 8l5 5" if kind == "prev" else "M6 3l5 5-5 5")
+             + '" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+    return (f'<a class="step {kind}" href="{e(href)}" aria-label="{label}: {e(sec["number"])} Example {ex["n"]}, {e(ex["title"])}">'
+            f'<span class="arrow">{arrow}</span>'
+            f'<span class="txt"><span class="k">{label} · {e(sec["number"])} Example {ex["n"]}</span>'
+            f'<span class="t">{e(ex["title"])}</span></span></a>')
 
 
 def video_page(sec, ex, prev, nxt):
