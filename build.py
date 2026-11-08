@@ -76,8 +76,6 @@ def example_row(sec, ex):
     anchor = slug("ex", sec["number"], ex["n"])
     title = e(ex["title"])
     res = "".join(chip(r) for r in ex.get("resources") or [])
-    if ex.get("video") and slides_for(sec, ex):
-        res = (f'<a class="chip" href="{e(page_path(sec, ex))}#slides">{ICONS["guide"]}<span>Slides</span></a>') + res
     if is_posted(ex):
         page = page_path(sec, ex)
         name = f'<a class="ex-title" href="{e(page)}">{title}</a>'
@@ -103,6 +101,10 @@ def section_block(sec):
     if sec.get("textbook_url"):
         book = (f'<a class="chip quiet" href="{e(sec["textbook_url"])}" target="_blank" rel="noopener">'
                 f'{ICONS["book"]}<span>Read the section</span></a>')
+    if sec.get("playlist_url"):
+        book += chip({"kind": "video", "label": "Section playlist", "url": sec["playlist_url"]})
+    if sec.get("review"):
+        book += chip({"kind": "video", "label": "Section review video", "url": sec["review"]})
     rows = "".join(example_row(sec, x) for x in exs)
     pct = round(100 * posted / len(exs)) if exs else 0
     return f'''
@@ -120,6 +122,21 @@ def section_block(sec):
     </details>'''
 
 
+def released(sec):
+    """A section shows once any of its videos is posted: sections go public whole, so until then it stays hidden."""
+    return any(is_posted(x) for x in sec.get("examples") or [])
+
+
+def visible(chapters):
+    """The chapters with their released sections only; chapters with none are left out."""
+    out = []
+    for ch in chapters:
+        secs = [s for s in ch.get("sections") or [] if released(s)]
+        if secs:
+            out.append(dict(ch, sections=secs))
+    return out
+
+
 def chapter_block(ch):
     secs = "".join(section_block(s) for s in ch.get("sections") or [])
     return f'''
@@ -133,13 +150,13 @@ def chapter_block(ch):
 def build():
     data = yaml.safe_load(DATA.read_text())
     c = data["course"]
-    chapters = data.get("chapters") or []
+    chapters = visible(data.get("chapters") or [])
     all_ex = [x for ch in chapters for s in ch.get("sections") or [] for x in s.get("examples") or []]
     posted = sum(1 for x in all_ex if is_posted(x))
     toc = "".join(
         f'<a href="#{slug("ch", ch["number"])}">Ch {ch["number"]} · {e(ch["title"])}</a>' for ch in chapters)
-    top_links = [chip({"kind": "video", "label": "YouTube playlist", "url": c["playlist_url"]}),
-                 chip({"kind": "link", "label": "Free textbook (OpenStax)", "url": c["textbook_url"]})]
+    top_links = [chip({"kind": "video", "label": "YouTube channel", "url": c["channel_url"]})] if c.get("channel_url") else []
+    top_links += [chip({"kind": "link", "label": "Free textbook (OpenStax)", "url": c["textbook_url"]})]
     top_links += [chip(r) for r in c.get("resources") or []]
 
     page = TEMPLATE.format(
@@ -171,7 +188,7 @@ def build():
     print(f"Built site/index.html: {len(chapters)} chapter(s), {len(all_ex)} examples, {posted} videos posted, {pages} video pages")
 
 
-BASE_CSS = """/* Clean Teal, matched to the slides: flat white cards on a cool gray page,
+BASE_CSS = """/* Clean Teal, matched to the videos: flat white cards on a cool gray page,
    bold teal titles, muted letter-spaced eyebrows, outlined teal part circles. */
 :root {
   --bg:#F3F5F8; --card:#FFFFFF; --text:#1F2633; --muted:#8A93A3; --line:#E6EAF0;
@@ -211,26 +228,9 @@ nav.steps .next {{ text-align:right; margin-left:auto; }}
 .quiet {{ margin-top:22px; font-size:14px; color:var(--muted); }}
 .quiet a {{ color:var(--muted); }}
 @media (max-width:560px) {{ nav.steps a {{ max-width:none; }} nav.steps {{ flex-direction:column; }} nav.steps .next {{ text-align:left; margin-left:0; }} }}
-#slides:focus {{ outline:none; }}
 .res {{ margin-top:36px; padding-top:22px; border-top:1px solid var(--line); scroll-margin-top:16px; }}
 .res-head {{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px; }}
 .res h2 {{ font-size:20px; margin:0; color:var(--teal); }}
-.dl {{ display:inline-flex; align-items:center; gap:6px; font-weight:700; font-size:15px; text-decoration:none; }}
-.dl:hover span {{ text-decoration:underline; }}
-.dl svg {{ width:15px; height:15px; flex:none; }}
-.dl small {{ color:var(--muted); font-weight:400; }}
-.stage {{ position:relative; aspect-ratio:16/9; border-radius:10px; overflow:hidden; background:#F3F5F8;
-  box-shadow:0 1px 3px rgba(31,38,51,.12); }}
-.stage img {{ position:absolute; inset:0; width:100%; height:100%; display:block; }}
-.stage video {{ position:absolute; display:none; background:#F3F5F8; cursor:pointer; }}
-.ctrl {{ display:flex; align-items:center; justify-content:center; gap:14px; margin-top:12px; font-size:14px; color:var(--muted);
-  font-variant-numeric:tabular-nums; }}
-.ctrl button {{ font:inherit; font-weight:700; color:var(--teal); background:var(--card); border:0; border-radius:6px;
-  padding:7px 14px; cursor:pointer; box-shadow:0 1px 2px rgba(31,38,51,.08); }}
-.ctrl button:disabled {{ color:var(--pending); cursor:default; }}
-.ctrl button:focus-visible {{ outline:2px solid var(--teal); }}
-.ctrl .replay {{ display:none; }}
-.res-note {{ font-size:13px; color:var(--muted); margin:10px 0 0; text-align:center; }}
 .res .chips {{ display:flex; flex-wrap:wrap; gap:6px 20px; }}
 </style>
 </head>
@@ -243,93 +243,19 @@ nav.steps .next {{ text-align:right; margin-left:auto; }}
   {resources}
   <p class="quiet"><a href="{home}#{anchor}">All examples</a>{yt}</p>
 </div>
-{script}
 </body>
 </html>
 """
 
 
-DOWNLOAD_ICON = ('<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5L8 10l3.5-3.5M3 13.5h10" '
-                 'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
-
-# The slide viewer: arrows (or the keyboard's arrow keys) step through the slide images; on a slide with an
-# animation, the clip plays in place, muted, and a click on it (or Replay) plays it again.
-VIEWER_SCRIPT = """<script>
-(function () {
-  var root = document.getElementById('slides'); if (!root) return;
-  var data = JSON.parse(root.getAttribute('data-deck'));
-  var base = root.getAttribute('data-base');
-  var img = root.querySelector('.stage img'), vid = root.querySelector('.stage video');
-  var prev = root.querySelector('.prev'), next = root.querySelector('.next'), replay = root.querySelector('.replay');
-  var count = root.querySelector('.count');
-  var i = 1;
-  function pad(k) { return (k < 10 ? '0' : '') + k; }
-  function clipFor(k) { return data.clips.filter(function (c) { return c.slide === k; })[0]; }
-  function show(k) {
-    i = Math.max(1, Math.min(data.slides, k));
-    img.src = base + 'slide-' + pad(i) + '.png';
-    img.alt = 'Slide ' + i + ' of ' + data.slides;
-    count.textContent = i + ' / ' + data.slides;
-    prev.disabled = i === 1; next.disabled = i === data.slides;
-    var c = clipFor(i);
-    vid.pause();
-    if (c) {
-      vid.style.left = (100 * c.box[0]) + '%'; vid.style.top = (100 * c.box[1]) + '%';
-      vid.style.width = (100 * c.box[2]) + '%'; vid.style.height = (100 * c.box[3]) + '%';
-      if (vid.getAttribute('data-src') !== c.media) { vid.src = base + c.media; vid.setAttribute('data-src', c.media); }
-      vid.style.display = 'block'; replay.style.display = 'inline-block';
-      vid.currentTime = 0; var p = vid.play(); if (p) p.catch(function () {});
-    } else { vid.style.display = 'none'; replay.style.display = 'none'; }
-    if (i < data.slides) { new Image().src = base + 'slide-' + pad(i + 1) + '.png'; }
-  }
-  function again() { vid.currentTime = 0; vid.play(); }
-  prev.addEventListener('click', function () { show(i - 1); });
-  next.addEventListener('click', function () { show(i + 1); });
-  replay.addEventListener('click', again); vid.addEventListener('click', again);
-  root.addEventListener('keydown', function (ev) {
-    if (ev.key === 'ArrowRight') { show(i + 1); ev.preventDefault(); }
-    if (ev.key === 'ArrowLeft') { show(i - 1); ev.preventDefault(); }
-  });
-  show(1);
-})();
-</script>"""
 
 
-def slides_for(sec, ex):
-    """The example's published slides (files/<section>/<n>/slides.json from tools/public_deck.py), or None.
-    They show only once the video is public, so a scheduled video's slides can be uploaded ahead of time."""
-    p = ROOT / "files" / str(sec["number"]) / str(ex["n"]) / "slides.json"
-    if not is_posted(ex):
-        return None
-    return json.loads(p.read_text()) if p.exists() else None
 
-
-def resources_block(sec, ex, home):
-    deck = slides_for(sec, ex)
+def resources_block(sec, ex):
     extra = chips(ex.get("resources"))
-    if not deck and not extra:
-        return "", ""
-    out, script = '<section class="res" id="slides">' if deck else '<section class="res">', ""
-    if deck:
-        base = f'{home}files/{sec["number"]}/{ex["n"]}/'
-        kb = (ROOT / "files" / str(sec["number"]) / str(ex["n"]) / "slides.pptx").stat().st_size // 1024
-        name = f'{sec["number"]} Example {ex["n"]} {ex["title"]} (slides).pptx'
-        anim = " The animation plays on its slide; click it to replay." if deck["clips"] else ""
-        out = (f'<section class="res" id="slides" tabindex="-1" data-base="{e(base)}" data-deck=\'{e(json.dumps(deck))}\'>'
-               f'<div class="res-head"><h2>Slides</h2>'
-               f'<a class="dl" href="{e(base)}slides.pptx" download="{e(name)}">{DOWNLOAD_ICON}'
-               f'<span>Download PowerPoint</span> <small>{kb:,} KB</small></a></div>'
-               f'<div class="stage"><img alt=""><video muted playsinline preload="auto" '
-               f'aria-label="Animation for this slide"></video></div>'
-               f'<div class="ctrl"><button class="prev" aria-label="Previous slide">←</button>'
-               f'<span class="count" aria-live="polite"></span>'
-               f'<button class="next" aria-label="Next slide">→</button>'
-               f'<button class="replay">Replay</button></div>'
-               f'<p class="res-note">Use the arrows or your arrow keys.{anim} The download keeps the animation.</p>')
-        script = VIEWER_SCRIPT
-    if extra:
-        out += f'{"" if deck else "<div class=res-head><h2>Resources</h2></div>"}{extra}'
-    return out + "</section>", script
+    if not extra:
+        return ""
+    return f'<section class="res"><div class=res-head><h2>Resources</h2></div>{extra}</section>'
 
 
 def video_id(url):
@@ -367,10 +293,10 @@ def video_page(sec, ex, prev, nxt):
         t = public_at(ex)
         player = f'<div class="player soon">Coming {f"{t:%b} {t.day}" if t else "soon"}</div>'
         yt = ""
-    resources, script = resources_block(sec, ex, home)
+    resources = resources_block(sec, ex)
     return VIDEO_TEMPLATE.format(
         base_css=BASE_CSS, title=title, sec=e(sec["number"]), n=ex["n"], player=player, home=home,
-        anchor=slug("ex", sec["number"], ex["n"]), yt=yt, resources=resources, script=script,
+        anchor=slug("ex", sec["number"], ex["n"]), yt=yt, resources=resources,
         prev=step_link("prev", prev, home), next=step_link("next", nxt, home))
 
 

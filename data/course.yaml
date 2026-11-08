@@ -7,10 +7,15 @@
 # slides, practice, link). A url starting with "files/" points to a
 # file stored in this repo's files/ folder.
 #
-# Leave `video:` empty until the video is on YouTube. The nightly sync
-# fills it in automatically from the course playlist.
+# Sections are released whole: all of a section's videos and its playlist
+# go public together. A section stays off the page until at least one of
+# its examples has a `video:` link. Leave `video:` empty while the videos
+# are private; the nightly sync fills the links in from each section's
+# `playlist_id` once the playlist is public (private playlists can't be read).
+# `playlist_url` and `review` (the section review video) show as links on
+# the section once it's released.
 #
-# A scheduled video gets its link now plus `public_at` (UTC). The page
+# A scheduled video can get its link early plus `public_at` (UTC); the page
 # shows "Coming Nov 2" until then, and the Watch button after.
 # ------------------------------------------------------------------
 
@@ -19,181 +24,56 @@ course:
   tagline: A short video walkthrough for every worked example in OpenStax College Algebra 2e, in textbook order.
   author: Dan Ray
   textbook_url: https://openstax.org/details/books/college-algebra-2e
-  playlist_url: https://www.youtube.com/playlist?list=PLRQYJJmEbJmI
-  playlist_id: PLRQYJJmEbJmI
+  channel_url: https://www.youtube.com/channel/UCVCzSgqaPzWiZoZ2FTAlo_A
   resources: []
 
 chapters:
-- number: 1
-  title: Prerequisites
+- number: 8
+  title: Analytic Geometry
   sections:
-  - number: "1.1"
-    title: "Real Numbers: Algebra Essentials"
-    textbook_url: https://openstax.org/books/college-algebra-2e/pages/1-1-real-numbers-algebra-essentials
+  - number: "8.1"
+    title: The Ellipse
+    textbook_url: https://openstax.org/books/college-algebra-2e/pages/8-1-the-ellipse
+    playlist_id: PLcH_xb9X8DAs
+    playlist_url: https://www.youtube.com/playlist?list=PLcH_xb9X8DAs
+    review: https://youtu.be/rJO7l4uKaRc
     examples:
     - n: 1
-      title: Writing Integers as Rational Numbers
-      video: https://youtu.be/LzfTg0IpfV0
+      title: "Writing the Equation of an Ellipse Centered at the Origin in Standard Form"
+      video: https://youtu.be/XLMdJZ7BRXM
     - n: 2
-      title: Identifying Rational Numbers
-      video: https://youtu.be/iSBQ8i78ljg
-      public_at: "2026-11-02T15:00:00Z"
+      title: "Writing the Equation of an Ellipse Centered at a Point Other Than the Origin"
+      video: https://youtu.be/NFZyYqgxS9k
     - n: 3
-      title: Differentiating Rational and Irrational Numbers
-      video: https://youtu.be/G5URjtO05Kk
-      public_at: "2026-11-04T15:00:00Z"
+      title: "Graphing an Ellipse Centered at the Origin"
+      video: https://youtu.be/1Om18-69vHQ
     - n: 4
-      title: Classifying Real Numbers
-      video: https://youtu.be/lz9t8g-G-4Q
-      public_at: "2026-11-06T15:00:00Z"
+      title: "Graphing an Ellipse Centered at the Origin from an Equation Not in Standard Form"
+      video: https://youtu.be/Gd6DpE06EPc
     - n: 5
-      title: Differentiating the Sets of Numbers
-      video: https://youtu.be/O9FyZBZ4jlw
-      public_at: "2026-11-09T15:00:00Z"
+      title: "Graphing an Ellipse Centered at (h, k)"
+      video: https://youtu.be/0hI8JdPbDGQ
     - n: 6
-      title: Using the Order of Operations
-      video: https://youtu.be/rs3VW9M8S3E
-      public_at: "2026-11-11T15:00:00Z"
+      title: "Graphing an Ellipse Centered at (h, k) by First Writing It in Standard Form"
+      video: https://youtu.be/8H1h4RHAxRY
     - n: 7
-      title: Using Properties of Real Numbers
-      video: https://youtu.be/1sktnC7YAVg
-      public_at: "2026-11-13T15:00:00Z"
-    - n: 8
-      title: Describing Algebraic Expressions
-      video: https://youtu.be/BSjXHjI4RrU
-      public_at: "2026-11-16T15:00:00Z"
-    - n: 9
-      title: Evaluating an Algebraic Expression at Different Values
-      video: https://youtu.be/c7Xn5HwT3ns
-      public_at: "2026-11-18T15:00:00Z"
-    - n: 10
-      title: Evaluating Algebraic Expressions
-    - n: 11
-      title: Using a Formula
-    - n: 12
-      title: Simplifying Algebraic Expressions
-    - n: 13
-      title: Simplifying a Formula
-
-      video: https://youtu.be/WcDaoys7dBY
-      public_at: "2026-11-26T15:00:00Z"
-  - number: "1.2"
-    title: Exponents and Scientific Notation
-    textbook_url: https://openstax.org/books/college-algebra-2e/pages/1-2-exponents-and-scientific-notation
+      title: "Locating the Foci of a Whispering Chamber"
+      video: https://youtu.be/LoTrHAr-tUg
+  - number: "8.2"
+    title: The Hyperbola
+    textbook_url: https://openstax.org/books/college-algebra-2e/pages/8-2-the-hyperbola
+    playlist_id: PLTJ6CPXO61xM
+    playlist_url: https://www.youtube.com/playlist?list=PLTJ6CPXO61xM
     examples:
     - n: 1
-      title: Using the Product Rule
+      title: "Locating a Hyperbola's Vertices and Foci"
     - n: 2
-      title: Using the Quotient Rule
+      title: "Finding the Equation of a Hyperbola Centered at (0, 0) Given its Foci and Vertices"
     - n: 3
-      title: Using the Power Rule
+      title: "Finding the Equation of a Hyperbola Centered at (h, k) Given its Foci and Vertices"
     - n: 4
-      title: Using the Zero Exponent Rule
+      title: "Graphing a Hyperbola Centered at (0, 0) Given an Equation in Standard Form"
     - n: 5
-      title: Using the Negative Exponent Rule
+      title: "Graphing a Hyperbola Centered at (h, k) Given an Equation in General Form"
     - n: 6
-      title: Using the Product and Quotient Rules
-    - n: 7
-      title: Using the Power of a Product Rule
-    - n: 8
-      title: Using the Power of a Quotient Rule
-    - n: 9
-      title: Simplifying Exponential Expressions
-    - n: 10
-      title: Converting Standard Notation to Scientific Notation
-    - n: 11
-      title: Converting Scientific Notation to Standard Notation
-    - n: 12
-      title: Using Scientific Notation
-    - n: 13
-      title: Applying Scientific Notation to Solve Problems
-
-  - number: "1.3"
-    title: Radicals and Rational Exponents
-    textbook_url: https://openstax.org/books/college-algebra-2e/pages/1-3-radicals-and-rational-exponents
-    examples:
-    - n: 1
-      title: Evaluating Square Roots
-    - n: 2
-      title: Using the Product Rule to Simplify Square Roots
-    - n: 3
-      title: Using the Product Rule to Simplify the Product of Multiple Square Roots
-    - n: 4
-      title: Using the Quotient Rule to Simplify Square Roots
-    - n: 5
-      title: Using the Quotient Rule to Simplify an Expression with Two Square Roots
-    - n: 6
-      title: Adding Square Roots
-    - n: 7
-      title: Subtracting Square Roots
-
-    - n: 8
-      title: Rationalizing a Denominator Containing a Single Term
-    - n: 9
-      title: Rationalizing a Denominator Containing Two Terms
-    - n: 10
-      title: Simplifying nth Roots
-    - n: 11
-      title: Writing Rational Exponents as Radicals
-    - n: 12
-      title: Writing Radicals as Rational Exponents
-    - n: 13
-      title: Simplifying Rational Exponents
-  - number: "1.4"
-    title: Polynomials
-    textbook_url: https://openstax.org/books/college-algebra-2e/pages/1-4-polynomials
-    examples:
-    - n: 1
-      title: Identifying the Degree and Leading Coefficient of a Polynomial
-    - n: 2
-      title: Adding Polynomials
-    - n: 3
-      title: Subtracting Polynomials
-    - n: 4
-      title: Multiplying Polynomials Using the Distributive Property
-    - n: 5
-      title: Using FOIL to Multiply Binomials
-    - n: 6
-      title: Expanding Perfect Squares
-    - n: 7
-      title: Multiplying Binomials Resulting in a Difference of Squares
-    - n: 8
-      title: Multiplying Polynomials Containing Several Variables
-
-  - number: "1.5"
-    title: Factoring Polynomials
-    textbook_url: https://openstax.org/books/college-algebra-2e/pages/1-5-factoring-polynomials
-    examples:
-    - n: 1
-      title: Factoring the Greatest Common Factor
-    - n: 2
-      title: Factoring a Trinomial with Leading Coefficient 1
-    - n: 3
-      title: Factoring a Trinomial by Grouping
-    - n: 4
-      title: Factoring a Perfect Square Trinomial
-
-    - n: 5
-      title: Factoring a Difference of Squares
-    - n: 6
-      title: Factoring a Sum of Cubes
-    - n: 7
-      title: Factoring a Difference of Cubes
-    - n: 8
-      title: Factoring an Expression with Fractional or Negative Exponents
-  - number: "1.6"
-    title: Rational Expressions
-    textbook_url: https://openstax.org/books/college-algebra-2e/pages/1-6-rational-expressions
-    examples:
-    - n: 1
-      title: Simplifying Rational Expressions
-    - n: 2
-      title: Multiplying Rational Expressions
-    - n: 3
-      title: Dividing Rational Expressions
-    - n: 4
-      title: Adding Rational Expressions
-    - n: 5
-      title: Subtracting Rational Expressions
-    - n: 6
-      title: Simplifying Complex Rational Expressions
+      title: "Solving Applied Problems Involving Hyperbolas"

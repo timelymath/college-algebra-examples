@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fill in video links in data/course.yaml from the course's YouTube playlist.
+"""Fill in video links in data/course.yaml from each section's YouTube playlist (`playlist_id`).
 
     python3 sync_youtube.py                 # reads the live playlist feed
     python3 sync_youtube.py --feed file.xml # reads a saved feed (for testing)
@@ -11,8 +11,10 @@ in the book share a title. Videos without that line are matched by exact
 title, but only when the title is unique in the course.
 
 It never removes or overwrites a link that's already there. It needs no
-API key: it uses YouTube's public RSS feed for the playlist (the newest 15
-videos), so it should run at least as often as videos are posted.
+API key: it uses YouTube's public RSS feed for each playlist (the newest 15
+videos). A private playlist has no feed yet, so it's skipped until the section
+is released; sections go public whole, so their links all land on the same night.
+A course-level `playlist_id`, if one comes back, is read too.
 """
 import argparse
 import pathlib
@@ -55,9 +57,18 @@ def main():
                 index[(str(sec["number"]), int(ex["n"]))] = (sec, ex)
                 by_title.setdefault(ex["title"].strip().lower(), []).append((sec, ex))
 
-    root = ET.fromstring(read_feed(args, data["course"]["playlist_id"]))
+    ids = [data["course"]["playlist_id"]] if data["course"].get("playlist_id") else []
+    ids += [s["playlist_id"] for ch in data["chapters"] for s in ch.get("sections") or [] if s.get("playlist_id")]
+    if args.feed:
+        ids = ids[:1] or ["feed"]
+    entries = []
+    for pid in ids:
+        try:
+            entries += ET.fromstring(read_feed(args, pid)).findall("a:entry", NS)
+        except Exception as exc:  # a private playlist has no public feed until its section is released
+            print(f"  playlist {pid}: no public feed yet ({exc})")
     added = []
-    for entry in root.findall("a:entry", NS):
+    for entry in entries:
         title = entry.findtext("a:title", "", NS).strip()
         link = entry.find("a:link", NS).get("href")
         desc = entry.findtext("media:group/media:description", "", NS)

@@ -7,8 +7,8 @@ A static website listing every College Algebra 2e example video in textbook orde
 | File | What it does |
 |---|---|
 | `data/course.yaml` | **The only file that changes day to day.** Chapters → sections → examples, with video links and resources. |
-| `build.py` | Turns the data file into `site/index.html`, plus a clean page per video (`site/1.1/6/`): the YouTube embed, Previous and Next links, and a link back to the index. |
-| `sync_youtube.py` | Fills in video links from the course playlist. |
+| `build.py` | Turns the data file into `site/index.html`, plus a clean page per video (`site/8.1/6/`): the YouTube embed, Previous and Next links, and a link back to the index. Only released sections appear. |
+| `sync_youtube.py` | Fills in video links from each section's playlist. |
 | `add_resource.py` | Attaches a study guide, worksheet, slides, or link to a chapter, section, or example. |
 | `files/` | PDFs and other files the site links to (e.g. `files/ch1/1.1-study-guide.pdf`). |
 | `.github/workflows/publish.yml` | Rebuilds and publishes the site automatically. |
@@ -22,20 +22,22 @@ A static website listing every College Algebra 2e example video in textbook orde
 
 ## Day to day
 
-### 1. A video goes up on YouTube: nothing to do
+### 1. A section is released: nothing to do
 
-A video scheduled ahead can be listed early: give it its `video:` link and `public_at: "2026-11-02T15:00:00Z"`. The page shows "Coming Nov 2" until that time and the Watch button on the first build after it.
+Since 2026-11-08 the course is released a section at a time: Dan uploads a section's videos privately into its own playlist, then makes the videos and the playlist public together. There's no course-wide playlist for now, and Chapter 8 is the first chapter on the site (Chapter 1 comes back later).
 
-Every video description already includes the line `From Section 1.1, Real Numbers: Algebra Essentials (Example 6)`. Each night at 3:17 am Eastern (and again at 15:17 UTC, just after scheduled releases), GitHub:
+Each section in `course.yaml` has `playlist_id`, `playlist_url` and, once it exists, `review` (the section review video, which isn't in the playlist). A section stays off the page until one of its examples has a `video:` link, so a section in progress is simply absent.
 
-1. reads the playlist's public feed (no API key needed),
+Every video description includes a line like `From Section 8.2, The Hyperbola (Example 1)`. Each night at 3:17 am Eastern (and again at 15:17 UTC), GitHub:
+
+1. reads each section playlist's public feed (no API key needed; a private playlist has no feed, so it's skipped until release),
 2. matches each video to its exact example using that line,
 3. saves the link into `course.yaml`, and
-4. rebuilds and republishes the site.
+4. rebuilds and republishes the site, which now shows the section with its playlist and review links.
 
-Want it live sooner? Open the repo's **Actions** tab and click **Run workflow**.
+Want it live sooner? Open the repo's **Actions** tab and click **Run workflow**, or Claude adds the links when Dan says the section is public.
 
-Existing links are never overwritten, and videos that don't match an example (a channel trailer, say) are skipped.
+Existing links are never overwritten, and videos that don't match an example are skipped.
 
 ### 2. A new resource (study guide, worksheet, slides, link): Claude handles it
 
@@ -62,8 +64,8 @@ Change `build.py` once. Every page picks up the change on the next build.
 
 ## Good to know
 
-- **Video pages:** every example with a video link has its own page, e.g. `.../1.1/6/`. The index's Watch buttons open it. A scheduled video's page says "Coming Nov 11" until it goes public. Previous and Next stand in for YouTube's end screen, which doesn't reliably show in embedded players.
-- **Slides:** `python3 tools/public_deck.py 1.1/1` in the pipeline repo writes `files/1.1/1/`: a clean copy of the reviewed deck (no presenter notes, comments or end card; the animation and its autoplay stay), each slide as a PNG, the clip, and `slides.json` with the clip's position. The video page then shows a slide viewer that plays the clip on its slide, with a PowerPoint download, and the index row gets a Slides link. About 1 MB per example.
-- **Deep links:** every example has its own address, e.g. `.../#ex-1-1-6`, and every section too (`#sec-1-2`). Study guides or video descriptions can point straight to a spot on the page.
-- **Feed limit:** YouTube's playlist feed shows the newest 15 videos. A nightly run covers that as long as fewer than 15 videos post in a day. For bulk uploads, run the workflow between batches, or switch the sync to the YouTube Data API, which uses a free key.
-- **Tested live 2026-11-01:** the sync matched 1.1 Ex 1 from the real playlist feed.
+- **Video pages:** every example with a video link has its own page, e.g. `.../8.1/6/`. The index's Watch buttons open it. A scheduled video's page says "Coming Nov 11" until it goes public. Previous and Next stand in for YouTube's end screen, which doesn't reliably show in embedded players.
+- **No slides:** the site doesn't post slides (Dan, 2026-11-08). Chapter 1's slide files were removed; they're in the git history.
+- **Deep links:** every example has its own address, e.g. `.../#ex-8-1-6`, and every section too (`#sec-8-2`). Study guides or video descriptions can point straight to a spot on the page.
+- **Feed limit:** each playlist feed shows its newest 15 videos, more than any section has so far. A nightly run covers that as long as fewer than 15 videos post in a day. For bulk uploads, run the workflow between batches, or switch the sync to the YouTube Data API, which uses a free key.
+- **Tested 2026-11-08:** the sync matched 8.1 Ex 1 and Ex 7 from the 8.1 playlist feed, and skipped the private 8.2 playlist.
