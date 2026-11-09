@@ -1,0 +1,22 @@
+title: 'Explore: moving the center to (h, k)'
+caption: 'Slide $h$ and $k$ to move the center; every point moves with it. Watch the signs: with $h = -2$ the equation reads $(x + 2)^2$. Change $m$ and $n$ to stretch it, as in Example 3. The example starts at $h = -2$, $k = 5$, $m = 4$ and $n = 9$.'
+height: 460
+panel: true
+view: {x: [-9, 5], y: [-1, 11]}
+expressions:
+  - {id: h, latex: 'h=-2', sliderBounds: {min: '-5', max: '5', step: '1'}}
+  - {id: k, latex: 'k=5', sliderBounds: {min: '-5', max: '8', step: '1'}}
+  - {id: m, latex: 'm=4', sliderBounds: {min: '1', max: '16', step: '1'}}
+  - {id: n, latex: 'n=9', sliderBounds: {min: '1', max: '16', step: '1'}}
+  - {id: ell, latex: '\frac{\left(x-h\right)^2}{m}+\frac{\left(y-k\right)^2}{n}=1', color: '#1F7A8C', lineWidth: 3}
+  - {id: a, latex: 'a=\sqrt{\max\left(m,n\right)}'}
+  - {id: b, latex: 'b=\sqrt{\min\left(m,n\right)}'}
+  - {id: c, latex: 'c=\sqrt{a^2-b^2}'}
+  - {id: v, latex: 'v=\left\{n>m:1,0\right\}', secret: true}
+  - {id: O, latex: '\left(h,k\right)', color: '#1F2633', label: 'center (h, k)', showLabel: true, labelOrientation: below, secret: true}
+  - {id: V1, latex: '\left(h+a(1-v),\ k+av\right)', color: '#1F7A8C', label: 'vertex', showLabel: true, labelOrientation: right, secret: true}
+  - {id: V2, latex: '\left(h-a(1-v),\ k-av\right)', color: '#1F7A8C', label: 'vertex', showLabel: true, labelOrientation: right, secret: true}
+  - {id: W1, latex: '\left(h+bv,\ k+b(1-v)\right)', color: '#5B6577', label: 'co-vertex', showLabel: true, labelOrientation: right, secret: true}
+  - {id: W2, latex: '\left(h-bv,\ k-b(1-v)\right)', color: '#5B6577', label: 'co-vertex', showLabel: true, labelOrientation: left, secret: true}
+  - {id: F1, latex: '\left(h+c(1-v),\ k+cv\right)', color: '#D9573B', label: 'focus', showLabel: true, labelOrientation: left, secret: true}
+  - {id: F2, latex: '\left(h-c(1-v),\ k-cv\right)', color: '#D9573B', label: 'focus', showLabel: true, labelOrientation: left, secret: true}

@@ -1,0 +1,12 @@
+height: 380
+panel: false
+view: {x: [-6, 6], y: [-9.5, 9.5]}
+expressions:
+  - {id: ell, latex: '\frac{x^2}{16}+\frac{y^2}{49}=1', color: '#1F7A8C', lineWidth: 3}
+  - {id: O, latex: '\left(0,0\right)', color: '#1F2633', label: '(0, 0)', showLabel: true, labelOrientation: right}
+  - {id: V1, latex: '\left(0,7\right)', color: '#1F7A8C', label: '(0, 7)', showLabel: true, labelOrientation: above}
+  - {id: V2, latex: '\left(0,-7\right)', color: '#1F7A8C', label: '(0, −7)', showLabel: true, labelOrientation: below}
+  - {id: W1, latex: '\left(4,0\right)', color: '#5B6577', label: '(4, 0)', showLabel: true, labelOrientation: right}
+  - {id: W2, latex: '\left(-4,0\right)', color: '#5B6577', label: '(−4, 0)', showLabel: true, labelOrientation: left}
+  - {id: F1, latex: '\left(0,\sqrt{33}\right)', color: '#D9573B', label: '(0, √33)', showLabel: true, labelOrientation: right}
+  - {id: F2, latex: '\left(0,-\sqrt{33}\right)', color: '#D9573B', label: '(0, −√33)', showLabel: true, labelOrientation: right}

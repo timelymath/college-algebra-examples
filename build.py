@@ -32,6 +32,14 @@ ICONS = {
 KIND_ICON = {"guide": "guide", "worksheet": "guide", "practice": "guide",
              "slides": "guide", "video": "play", "link": "link"}
 
+# Try It math and Desmos graphs, loaded only on the pages that use them.
+GRAPHS = ROOT / "data" / "graphs"
+KATEX = "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9"
+# Desmos's public demo key, for testing only. Swap in a production key
+# (request one at https://www.desmos.com/my-api) before this goes live.
+DESMOS_KEY = "dcb31709b452b1cf9dc26972add0fda6"
+DESMOS_JS = f"https://www.desmos.com/api/v1.11/calculator.js?apiKey={DESMOS_KEY}"
+
 e = html.escape
 
 
@@ -238,17 +246,17 @@ nav.steps {{ display:flex; justify-content:space-between; gap:16px; margin-top:2
 .res-head {{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px; }}
 .res h2 {{ font-size:20px; margin:0; color:var(--teal); }}
 .res .chips {{ display:flex; flex-wrap:wrap; gap:6px 20px; }}
-</style>
+</style>{head_extra}
 </head>
 <body>
 <div class="wrap">
   <div class="eyebrow">Section {sec} · Example {n}</div>
   <h1>{title}</h1>
-  {player}
+  {player}{extras}
   <nav class="steps">{prev}{next}</nav>
   {resources}
   <p class="quiet"><a href="{home}#{anchor}">All examples</a>{yt}</p>
-</div>
+</div>{scripts}
 </body>
 </html>
 """
@@ -258,10 +266,134 @@ nav.steps {{ display:flex; justify-content:space-between; gap:16px; margin-top:2
 
 
 def resources_block(sec, ex):
-    extra = chips(ex.get("resources"))
+    # The section's own resources (e.g. its one-page summary) show on each of its video pages too.
+    # Video pages sit two folders down (8.1/6/), so links into files/ need ../../ in front.
+    res = [dict(r, url="../../" + r["url"]) if str(r.get("url", "")).startswith("files/") else r
+           for r in list(sec.get("resources") or []) + list(ex.get("resources") or [])]
+    extra = chips(res)
     if not extra:
         return ""
     return f'<section class="res"><div class=res-head><h2>Resources</h2></div>{extra}</section>'
+
+
+def graph_div(name):
+    """A Desmos graph from data/graphs/<name>.yaml, drawn by the page script."""
+    g = yaml.safe_load((GRAPHS / f"{name}.yaml").read_text())
+    cfg = {k: g[k] for k in ("expressions", "view", "panel") if k in g}
+    div = (f'<div class="graph{" with-panel" if g.get("panel") else ""}" style="--h:{int(g.get("height", 380))}px" '
+           f'data-graph="{e(json.dumps(cfg, ensure_ascii=False))}" role="img" '
+           f'aria-label="{e(g.get("title") or "Graph of the answer")}"></div>')
+    return div, g
+
+
+def try_it_block(sec, ex):
+    """The textbook's Try It for this example: the problem, then a hint and the answer behind reveals.
+    prompt, hint and answer may hold simple HTML and $math$ (rendered by KaTeX)."""
+    t = ex.get("try_it")
+    if not t:
+        return ""
+    graph = graph_div(t["graph"])[0] if t.get("graph") else ""
+    book = e(sec.get("textbook_url") or "https://openstax.org/details/books/college-algebra-2e")
+    return f'''
+  <section class="tryit" id="try-it" aria-labelledby="try-it-h">
+    <div class="ti-head"><h2 id="try-it-h">Try It #{t["n"]}</h2><span class="ti-sub">Your turn: a problem like the one in the video</span></div>
+    <div class="ti-prompt">{t["prompt"]}</div>
+    <details class="ti-reveal"><summary>Show a hint</summary><div class="ti-body">{t["hint"]}</div></details>
+    <details class="ti-reveal"><summary>Show the answer</summary><div class="ti-body">{t["answer"]}{graph}</div></details>
+    <p class="ti-credit">Try It #{t["n"]} is from <a href="{book}" target="_blank" rel="noopener">College Algebra 2e, Section {e(sec["number"])}</a> (OpenStax, CC BY 4.0). The hint is ours.</p>
+  </section>'''
+
+
+def explore_block(ex):
+    """An interactive Desmos graph with sliders, for examples where moving the numbers shows the idea."""
+    name = ex.get("explore")
+    if not name:
+        return ""
+    div, g = graph_div(name)
+    return f'''
+  <section class="explore" aria-labelledby="explore-h">
+    <h2 id="explore-h">{e(g["title"])}</h2>
+    <p class="ex-cap">{g["caption"]}</p>
+    {div}
+  </section>'''
+
+
+EXTRAS_CSS = """
+<style>
+.tryit, .explore {{ margin-top:24px; background:var(--card); border-radius:10px; padding:20px 22px; box-shadow:0 1px 2px rgba(31,38,51,.06); }}
+.tryit {{ border-left:4px solid var(--coral); }}
+.ti-head {{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:10px; }}
+.tryit h2, .explore h2 {{ font-size:20px; margin:0; color:var(--teal); }}
+.ti-sub {{ font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; }}
+.ti-prompt {{ font-size:17px; }}
+.ti-prompt p, .ti-body p {{ margin:0 0 8px; }}
+.ti-prompt ol, .ti-body ol, .ti-body ul {{ margin:6px 0 8px; padding-left:24px; }}
+.ti-prompt li, .ti-body li {{ margin:4px 0; }}
+.ti-reveal {{ margin-top:12px; border:1.5px solid var(--line); border-radius:8px; }}
+.ti-reveal summary {{ cursor:pointer; padding:10px 14px; font-weight:700; color:var(--teal); list-style:none; display:flex; align-items:center; gap:10px; }}
+.ti-reveal summary::-webkit-details-marker {{ display:none; }}
+.ti-reveal summary::before {{ content:""; width:7px; height:7px; border-right:2px solid currentColor; border-bottom:2px solid currentColor;
+  transform:rotate(-45deg); transition:transform .15s; flex:none; }}
+.ti-reveal[open] summary::before {{ transform:rotate(45deg); }}
+.ti-reveal summary:focus-visible {{ outline:2px solid var(--teal); outline-offset:2px; border-radius:6px; }}
+.ti-body {{ padding:2px 16px 14px; }}
+.ti-why {{ color:var(--muted); }}
+.ti-credit {{ margin:14px 0 0; font-size:13px; color:var(--muted); }}
+.ti-credit a {{ color:var(--muted); }}
+.ex-cap {{ margin:6px 0 14px; max-width:70ch; }}
+.graph {{ height:var(--h); width:100%; margin-top:10px; border-radius:8px; overflow:hidden; border:1px solid var(--line); background:#fff; }}
+.graph.with-panel {{ height:calc(var(--h) + 40px); }}
+.katex {{ font-size:1.08em; }}
+.ti-prompt .katex-display {{ margin:10px 0 4px; }}
+@media (max-width:560px) {{
+  .tryit, .explore {{ padding:16px 14px; }}
+  .graph.with-panel {{ height:calc(var(--h) + 220px); }}
+}}
+</style>"""
+
+
+def page_assets(ex):
+    """The extra <head> and closing scripts a video page needs, or empty strings for a plain page."""
+    if not (ex.get("try_it") or ex.get("explore")):
+        return "", ""
+    head = (EXTRAS_CSS.replace("{{", "{").replace("}}", "}") +
+            f'\n<link rel="stylesheet" href="{KATEX}/katex.min.css">')
+    scripts = f'''
+<script defer src="{KATEX}/katex.min.js"></script>
+<script defer src="{KATEX}/contrib/auto-render.min.js"
+  onload="document.querySelectorAll('.tryit, .ex-cap').forEach(function (el) {{ renderMathInElement(el, {{delimiters:[{{left:'$$',right:'$$',display:true}},{{left:'$',right:'$',display:false}}], ignoredClasses:['graph'], throwOnError:false}}) }})"></script>
+<script src="{DESMOS_JS}"></script>
+<script>
+(function () {{
+  // Each .graph holds its Desmos setup as JSON. Graphs inside a closed reveal are drawn when it opens,
+  // since Desmos can't size itself while hidden. The view is widened on one side so x and y share a scale.
+  if (!window.Desmos) return;
+  function draw(el) {{
+    if (el.getAttribute('data-ready')) return;
+    el.setAttribute('data-ready', '1');
+    var g = JSON.parse(el.getAttribute('data-graph'));
+    var calc = Desmos.GraphingCalculator(el, {{
+      expressions: !!g.panel, expressionsCollapsed: false, expressionsTopbar: false, settingsMenu: false, keypad: false,
+      zoomButtons: true, border: false, lockViewport: false, pointsOfInterest: false, trace: false,
+      showResetButtonOnGraphpaper: true, autosize: true
+    }});
+    calc.setExpressions(g.expressions);
+    if (g.view) {{
+      var x = g.view.x, y = g.view.y, r = calc.graphpaperBounds.pixelCoordinates;
+      var w = r.width, h = r.height, sx = (x[1] - x[0]) / w, sy = (y[1] - y[0]) / h, s = Math.max(sx, sy);
+      var cx = (x[0] + x[1]) / 2, cy = (y[0] + y[1]) / 2;
+      calc.setMathBounds({{ left: cx - s * w / 2, right: cx + s * w / 2, bottom: cy - s * h / 2, top: cy + s * h / 2 }});
+      calc.setDefaultState(calc.getState());
+    }}
+  }}
+  Array.prototype.forEach.call(document.querySelectorAll('.graph'), function (el) {{
+    var d = el.closest('details');
+    if (!d) return draw(el);
+    d.addEventListener('toggle', function () {{ if (d.open) draw(el); }});
+  }});
+}})();
+</script>'''
+    return head, scripts
 
 
 def video_id(url):
@@ -303,9 +435,11 @@ def video_page(sec, ex, prev, nxt):
         player = f'<div class="player soon">Coming {f"{t:%b} {t.day}" if t else "soon"}</div>'
         yt = ""
     resources = resources_block(sec, ex)
+    head_extra, scripts = page_assets(ex)
     return VIDEO_TEMPLATE.format(
         base_css=BASE_CSS, title=title, sec=e(sec["number"]), n=ex["n"], player=player, home=home,
         anchor=slug("ex", sec["number"], ex["n"]), yt=yt, resources=resources,
+        extras=try_it_block(sec, ex) + explore_block(ex), head_extra=head_extra, scripts=scripts,
         prev=step_link("prev", prev, home), next=step_link("next", nxt, home))
 
 

@@ -1,0 +1,24 @@
+# Desmos graph for the 8.1 Example 1 page. `view` is the region that must stay visible;
+# the page widens one side so a unit is the same length on both axes.
+title: 'Explore: why the vertices and foci give you the equation'
+caption: 'Drag the point $P$ around the ellipse, or change $a$ and $c$ with the sliders. The two distances from $P$ to the foci, $d_1$ and $d_2$, always add to $2a$. That is what makes it an ellipse, and it is where $c^2 = a^2 - b^2$ comes from.'
+height: 460
+panel: true
+view: {x: [-11, 11], y: [-7, 7]}
+expressions:
+  - {id: a, latex: 'a=8', sliderBounds: {min: '2', max: '10', step: '0.5'}}
+  - {id: c, latex: 'c=5', sliderBounds: {min: '0', max: 'a-0.5', step: '0.5'}}
+  - {id: d1, latex: 'd_1=\operatorname{distance}\left(P,F_1\right)'}
+  - {id: d2, latex: 'd_2=\operatorname{distance}\left(P,F_2\right)'}
+  - {id: sum, latex: 'd_1+d_2'}
+  - {id: b, latex: 'b=\sqrt{a^2-c^2}'}
+  - {id: ell, latex: '\frac{x^2}{a^2}+\frac{y^2}{b^2}=1', color: '#1F7A8C', lineWidth: 3}
+  - {id: u, latex: 'u=1.1', sliderBounds: {min: '0', max: '2\pi'}, secret: true}
+  - {id: X, latex: 'X(v)=a\cos v', hidden: true, secret: true}
+  - {id: Y, latex: 'Y(v)=b\sin v', hidden: true, secret: true}
+  - {id: P, latex: 'P=\left(X(u),\ Y(u)\right)', color: '#1F2633', label: 'P', showLabel: true, pointSize: 12, secret: true}
+  - {id: F1, latex: 'F_1=\left(-c,0\right)', color: '#D9573B', label: 'focus', showLabel: true, labelOrientation: below, secret: true}
+  - {id: F2, latex: 'F_2=\left(c,0\right)', color: '#D9573B', label: 'focus', showLabel: true, labelOrientation: below, secret: true}
+  - {id: V, latex: '\left[\left(-a,0\right),\left(a,0\right)\right]', color: '#1F7A8C', label: 'vertex', showLabel: true, labelOrientation: above, secret: true}
+  - {id: s1, latex: '\left((1-t)(-c)+ta\cos u,\ tb\sin u\right)', color: '#D9573B', parametricDomain: {min: '0', max: '1'}, secret: true}
+  - {id: s2, latex: '\left((1-t)c+ta\cos u,\ tb\sin u\right)', color: '#D9573B', lineStyle: DASHED, parametricDomain: {min: '0', max: '1'}, secret: true}

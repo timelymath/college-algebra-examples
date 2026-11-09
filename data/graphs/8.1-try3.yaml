@@ -1,0 +1,12 @@
+height: 320
+panel: false
+view: {x: [-8, 8], y: [-3.5, 3.5]}
+expressions:
+  - {id: ell, latex: '\frac{x^2}{36}+\frac{y^2}{4}=1', color: '#1F7A8C', lineWidth: 3}
+  - {id: O, latex: '\left(0,0\right)', color: '#1F2633', label: '(0, 0)', showLabel: true, labelOrientation: below}
+  - {id: V1, latex: '\left(6,0\right)', color: '#1F7A8C', label: '(6, 0)', showLabel: true, labelOrientation: right}
+  - {id: V2, latex: '\left(-6,0\right)', color: '#1F7A8C', label: '(−6, 0)', showLabel: true, labelOrientation: left}
+  - {id: W1, latex: '\left(0,2\right)', color: '#5B6577', label: '(0, 2)', showLabel: true, labelOrientation: above}
+  - {id: W2, latex: '\left(0,-2\right)', color: '#5B6577', label: '(0, −2)', showLabel: true, labelOrientation: below}
+  - {id: F1, latex: '\left(4\sqrt{2},0\right)', color: '#D9573B', label: '(4√2, 0)', showLabel: true, labelOrientation: above}
+  - {id: F2, latex: '\left(-4\sqrt{2},0\right)', color: '#D9573B', label: '(−4√2, 0)', showLabel: true, labelOrientation: above}
