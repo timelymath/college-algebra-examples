@@ -58,7 +58,9 @@ The push triggers the workflow, and the site updates in about a minute.
 
 When Claude sets up a new section (`/section`), it adds that section's example list to `course.yaml` in the same session, each example with its `try_it:` (the textbook's Try It, a hint and the answer). The section stays off the page until it's released.
 
-When the section is done, Claude makes its one-page summary PDF and attaches it to the section with `add_resource.py <s> guide …`. It shows only on the index, next to the section playlist, review video and "Read the section" links.
+When the section is done, Claude makes its one-page summary PDF and attaches it to the section with `add_resource.py <s> guide …`. It shows only on the index, next to the section playlist, review video and Compendium links.
+
+Once all of a section's videos are done, it can also get a **Section Compendium**: our streamlined rewrite of the section, with a QR code for every example video (model: 8.1). Its source is in `OCA/Claude outputs/8.1 textbook mockup/` (`template.html` + `build.py`, which writes `compendium/8.1.html` here). Add `compendium: compendium/<s>.html` to the section in `course.yaml`; the page is served at `<s>/compendium/`, and its "Section <s> Compendium" link replaces "Read the section" on the index.
 
 ### 4. Changing the design
 

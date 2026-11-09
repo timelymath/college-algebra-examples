@@ -22,6 +22,10 @@
 # (n, prompt, hint, answer; each may hold simple HTML and $math$). It shows
 # on the video page under the Previous and Next buttons. Each section gets
 # its one-page summary as a `guide` resource once the section is done.
+#
+# `compendium` (optional) points to a section's finished compendium page in
+# this repo (compendium/8.1.html). It's served at 8.1/compendium/, and its
+# "Section 8.1 Compendium" link replaces the "Read the section" link.
 # ------------------------------------------------------------------
 
 course:
@@ -42,6 +46,7 @@ chapters:
     playlist_id: PLcH_xb9X8DAs
     playlist_url: https://www.youtube.com/playlist?list=PLcH_xb9X8DAs
     review: https://youtu.be/rJO7l4uKaRc
+    compendium: compendium/8.1.html
     resources:
     - kind: guide
       label: Section 8.1 one-page summary (PDF)

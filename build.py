@@ -105,7 +105,11 @@ def section_block(sec):
         book += chip({"kind": "video", "label": "Section playlist", "url": sec["playlist_url"]})
     if sec.get("review"):
         book += chip({"kind": "video", "label": "Section review video", "url": sec["review"]})
-    if sec.get("textbook_url"):
+    if sec.get("compendium"):
+        # The section's compendium page (our rewrite of the section) takes the textbook link's place.
+        book += (f'<a class="chip" href="{e(compendium_path(sec))}">'
+                 f'{ICONS["book"]}<span>Section {e(sec["number"])} Compendium</span></a>')
+    elif sec.get("textbook_url"):
         book += (f'<a class="chip quiet" href="{e(sec["textbook_url"])}" target="_blank" rel="noopener">'
                  f'{ICONS["book"]}<span>Read the section</span></a>')
     rows = "".join(example_row(sec, x) for x in exs)
@@ -123,6 +127,11 @@ def section_block(sec):
       {chips(sec.get("resources"), book)}
       <ol class="examples">{rows}</ol>
     </details>'''
+
+
+def compendium_path(sec):
+    """Where a section's compendium page is served, e.g. 8.1/compendium/."""
+    return f'{sec["number"]}/compendium/'
 
 
 def released(sec):
@@ -184,6 +193,13 @@ def build():
         d.mkdir(parents=True)
         (d / "index.html").write_text(video_page(sec, ex, prev, nxt))
         pages += 1
+    # Compendium pages are finished HTML (built outside this repo); copy each released one into place.
+    for ch in chapters:
+        for sec in ch.get("sections") or []:
+            if sec.get("compendium"):
+                d = OUT / compendium_path(sec)
+                d.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / sec["compendium"], d / "index.html")
     files = ROOT / "files"
     if files.exists():
         shutil.copytree(files, OUT / "files", dirs_exist_ok=True)
