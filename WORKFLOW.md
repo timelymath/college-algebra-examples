@@ -56,7 +56,9 @@ The push triggers the workflow, and the site updates in about a minute.
 
 ### 3. A new section starts: Claude adds its examples
 
-When Claude drafts a new section's decks, it adds that section's example list to `course.yaml` in the same session. The examples show as "Coming soon" until their videos post.
+When Claude sets up a new section (`/section`), it adds that section's example list to `course.yaml` in the same session, each example with its `try_it:` (the textbook's Try It, a hint and the answer). The section stays off the page until it's released.
+
+When the section is done, Claude makes its one-page summary PDF and attaches it to the section with `add_resource.py <s> guide …`. It shows only on the index, next to the section playlist, review video and "Read the section" links.
 
 ### 4. Changing the design
 
@@ -65,6 +67,7 @@ Change `build.py` once. Every page picks up the change on the next build.
 ## Good to know
 
 - **Video pages:** every example with a video link has its own page, e.g. `.../8.1/6/`. The index's Watch buttons open it. A scheduled video's page says "Coming Nov 11" until it goes public. Previous and Next stand in for YouTube's end screen, which doesn't reliably show in embedded players.
+- **Try It:** a video page shows its example's Try It under the Previous and Next buttons, with the hint and the answer collapsed. The math is rendered by KaTeX (from cdnjs), loaded only on pages that have a Try It. Nothing else goes on video pages; section resources show on the index only (Dan, 2026-11-08).
 - **No slides:** the site doesn't post slides (Dan, 2026-11-08). Chapter 1's slide files were removed; they're in the git history.
 - **Deep links:** every example has its own address, e.g. `.../#ex-8-1-6`, and every section too (`#sec-8-2`). Study guides or video descriptions can point straight to a spot on the page.
 - **Feed limit:** each playlist feed shows its newest 15 videos, more than any section has so far. A nightly run covers that as long as fewer than 15 videos post in a day. For bulk uploads, run the workflow between batches, or switch the sync to the YouTube Data API, which uses a free key.

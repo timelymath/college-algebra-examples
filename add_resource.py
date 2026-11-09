@@ -52,7 +52,7 @@ def main(argv):
     yaml = YAML()
     yaml.preserve_quotes = True
     yaml.width = 4096
-    yaml.indent(mapping=2, sequence=4, offset=2)
+    yaml.indent(mapping=2, sequence=2, offset=0)  # same layout as course.yaml (and site.py)
     data = yaml.load(DATA)
     target, ch_n = find_target(data, where)
 
