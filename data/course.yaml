@@ -25,7 +25,14 @@
 #
 # `compendium` (optional) points to a section's finished compendium page in
 # this repo (compendium/8.1.html). It's served at 8.1/compendium/, and its
-# "Section 8.1 Compendium" link replaces the "Read the section" link.
+# "Section 8.1 Compendium" card replaces the "Read the section" card.
+#
+# For the home page, each example can carry `duration` (its video length,
+# "3:50"), and each section `skills` (a list of `name` + `examples`, the same
+# skills as the compendium's path) and `review_note` (one line under the
+# review card). A resource can add `tag` (the small label on its card) and
+# `note` (one line under its title). All optional: without them the rows
+# show ungrouped and without lengths.
 # ------------------------------------------------------------------
 
 course:
@@ -46,15 +53,28 @@ chapters:
     playlist_id: PLcH_xb9X8DAs
     playlist_url: https://www.youtube.com/playlist?list=PLcH_xb9X8DAs
     review: https://youtu.be/rJO7l4uKaRc
+    review_note: All seven examples in one 23-minute video.
     compendium: compendium/8.1.html
+    skills:
+    - name: Write the equation
+      examples: [1, 2]
+    - name: Graph the ellipse
+      examples: [3, 4, 5]
+    - name: Rewrite general form
+      examples: [6]
+    - name: Solve a real problem
+      examples: [7]
     resources:
     - kind: guide
-      label: Section 8.1 one-page summary (PDF)
+      tag: Summary
+      label: One-page summary
+      note: Printable PDF.
       url: files/ch8/8.1-summary.pdf
     examples:
     - n: 1
       title: "Writing the Equation of an Ellipse Centered at the Origin in Standard Form"
       video: https://youtu.be/XLMdJZ7BRXM
+      duration: "3:50"
       try_it:
         n: 1
         prompt: 'What is the standard form equation of the ellipse that has vertices $(0, \pm 4)$ and foci $\left(0, \pm\sqrt{15}\right)$?'
@@ -63,6 +83,7 @@ chapters:
     - n: 2
       title: "Writing the Equation of an Ellipse Centered at a Point Other Than the Origin"
       video: https://youtu.be/NFZyYqgxS9k
+      duration: "4:19"
       try_it:
         n: 2
         prompt: 'What is the standard form equation of the ellipse that has vertices $(-3, 3)$ and $(5, 3)$ and foci $\left(1 - 2\sqrt{3}, 3\right)$ and $\left(1 + 2\sqrt{3}, 3\right)$?'
@@ -71,6 +92,7 @@ chapters:
     - n: 3
       title: "Graphing an Ellipse Centered at the Origin"
       video: https://youtu.be/1Om18-69vHQ
+      duration: "2:18"
       try_it:
         n: 3
         prompt: 'Graph the ellipse given by the equation $\dfrac{x^2}{36} + \dfrac{y^2}{4} = 1$. Identify and label the center, vertices, co-vertices, and foci.'
@@ -79,6 +101,7 @@ chapters:
     - n: 4
       title: "Graphing an Ellipse Centered at the Origin from an Equation Not in Standard Form"
       video: https://youtu.be/Gd6DpE06EPc
+      duration: "2:41"
       try_it:
         n: 4
         prompt: 'Graph the ellipse given by the equation $49x^2 + 16y^2 = 784$. Rewrite the equation in standard form. Then identify and label the center, vertices, co-vertices, and foci.'
@@ -87,6 +110,7 @@ chapters:
     - n: 5
       title: "Graphing an Ellipse Centered at (h, k)"
       video: https://youtu.be/0hI8JdPbDGQ
+      duration: "2:57"
       try_it:
         n: 5
         prompt: 'Graph the ellipse given by the equation $\dfrac{(x-4)^2}{36} + \dfrac{(y-2)^2}{20} = 1$. Identify and label the center, vertices, co-vertices, and foci.'
@@ -95,6 +119,7 @@ chapters:
     - n: 6
       title: "Graphing an Ellipse Centered at (h, k) by First Writing It in Standard Form"
       video: https://youtu.be/8H1h4RHAxRY
+      duration: "4:40"
       try_it:
         n: 6
         prompt: 'Express the equation of the ellipse in standard form. Identify the center, vertices, co-vertices, and foci of the ellipse. $$4x^2 + y^2 - 24x + 2y + 21 = 0$$'
@@ -103,6 +128,7 @@ chapters:
     - n: 7
       title: "Locating the Foci of a Whispering Chamber"
       video: https://youtu.be/LoTrHAr-tUg
+      duration: "2:45"
       try_it:
         n: 7
         prompt: '<p>Suppose a whispering chamber is 480 feet long and 320 feet wide.</p><ol type="a"><li>What is the standard form of the equation of the ellipse representing the room? Hint: assume a horizontal ellipse, and let the center of the room be the point $(0, 0)$.</li><li>If two people are standing at the foci of this room and can hear each other whisper, how far apart are the people? Round to the nearest foot.</li></ol>'

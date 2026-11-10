@@ -58,7 +58,9 @@ The push triggers the workflow, and the site updates in about a minute.
 
 When Claude sets up a new section (`/section`), it adds that section's example list to `course.yaml` in the same session, each example with its `try_it:` (the textbook's Try It, a hint and the answer). The section stays off the page until it's released.
 
-When the section is done, Claude makes its one-page summary PDF and attaches it to the section with `add_resource.py <s> guide …`. It shows only on the index, next to the section playlist, review video and Compendium links.
+For the home page, Claude also adds the section's `skills:` (a `name` and its `examples` for each skill, the same skills as the compendium's path), a `review_note:` (one line under the review card, e.g. "All seven examples in one 23-minute video."), and, once the videos exist, each example's `duration:` ("3:50"). All three are optional: without them the rows show ungrouped, without lengths, and with a generic review line.
+
+When the section is done, Claude makes its one-page summary PDF and attaches it to the section with `add_resource.py <s> guide …`. It shows only on the index, as a card next to the section's Compendium, review video and playlist cards. Give it `tag: Summary`, `label: One-page summary` and `note: Printable PDF.` in `course.yaml` so the card reads well.
 
 Once all of a section's videos are done, it can also get a **Section Compendium**: our streamlined rewrite of the section, with its videos and study tools built in (model: 8.1). See **Section Compendium spec** below.
 
@@ -104,6 +106,8 @@ The 8.1 page (`8.1/compendium/`) is the model. Build each new one from its sourc
 ## Good to know
 
 - **Dark by default:** every page (index, video pages, compendiums) is dark unless the visitor clicks Light mode. The choice is saved in the browser as `tm-theme` and applies to the whole site. It does not follow the device's light or dark setting (Dan, 2026-11-10). For the index and video pages the colors are in `BASE_CSS` in `build.py`; a compendium carries its own copy in its template.
+- **Home page:** a "Start here" card that becomes "Up next" (the first example this visitor hasn't watched, then the newest compendium's practice set once everything is watched), three how-to-use steps, and one card per section: the visitor's own progress, link cards (Compendium first, with their Try It count from the compendium page), and example rows grouped by skill with a thumbnail, length and Try It link. Thumbnails come straight from YouTube (`i.ytimg.com/vi/<id>/mqdefault.jpg`), so a new section needs no image files. Same typefaces (Archivo, Source Serif 4) and colors as the compendium.
+- **Watched checkmarks:** opening a posted example's video page marks it watched in that browser (`localStorage`, key `tm-watched`). The home page reads it, and a visitor can mark or unmark an example with its number circle. Nothing is sent anywhere, so checkmarks don't follow a student to another device.
 - **Video pages:** every example with a video link has its own page, e.g. `.../8.1/6/`. The index's Watch buttons open it. A scheduled video's page says "Coming Nov 11" until it goes public. Previous and Next stand in for YouTube's end screen, which doesn't reliably show in embedded players.
 - **Try It:** a video page shows its example's Try It under the Previous and Next buttons, with the hint and the answer collapsed. The math is rendered by KaTeX (from cdnjs), loaded only on pages that have a Try It. Nothing else goes on video pages; section resources show on the index only (Dan, 2026-11-08).
 - **No slides:** the site doesn't post slides (Dan, 2026-11-08). Chapter 1's slide files were removed; they're in the git history.
