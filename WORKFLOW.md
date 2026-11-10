@@ -60,14 +60,50 @@ When Claude sets up a new section (`/section`), it adds that section's example l
 
 When the section is done, Claude makes its one-page summary PDF and attaches it to the section with `add_resource.py <s> guide …`. It shows only on the index, next to the section playlist, review video and Compendium links.
 
-Once all of a section's videos are done, it can also get a **Section Compendium**: our streamlined rewrite of the section, with a QR code for every example video (model: 8.1). Its source is in `OCA/Claude outputs/8.1 textbook mockup/` (`template.html` + `build.py`, which writes `compendium/8.1.html` here). Add `compendium: compendium/<s>.html` to the section in `course.yaml`; the page is served at `<s>/compendium/`, and its "Section <s> Compendium" link replaces "Read the section" on the index.
+Once all of a section's videos are done, it can also get a **Section Compendium**: our streamlined rewrite of the section, with its videos and study tools built in (model: 8.1). See **Section Compendium spec** below.
 
 ### 4. Changing the design
 
 Change `build.py` once. Every page picks up the change on the next build.
 
+## Section Compendium spec
+
+The 8.1 page (`8.1/compendium/`) is the model. Build each new one from its source so every section looks and works the same.
+
+**Source and build.** `OCA/Claude outputs/8.1 textbook mockup/`: `template.html` (the page), `build.py` (fills in QR codes, video stills and links; needs `segno`, so run it from a scratch venv) and `frames/` (one still per example video). `build.py` writes `compendium/<s>.html` in this repo plus a claude.ai mockup with dashed "New" notes. `template-v1.html` is the first design, kept for reference only. For a new section, copy the folder, replace the content, and keep the structure, CSS and scripts. Then add `compendium: compendium/<s>.html` to the section in `course.yaml`; the page is served at `<s>/compendium/`, and its "Section <s> Compendium" link replaces "Read the section" on the index.
+
+**Page order.**
+
+1. Top bar: link back to the index, the page name, and the Light mode button.
+2. Header: section number and title, a hook that an example later pays off, a prerequisites line, and an animated or interactive hero figure.
+3. Your path: one card per skill (A, B, C…) with its examples, total video time and a Try It count. Beside it: QR tiles for the playlist, the review video and the summary PDF.
+4. Section bar (sticks to the top): a link to every part of the page with the current one highlighted, a reading-progress line, the Try It count (tap to jump to the next unfinished one), and a Formulas button that opens the key formulas from anywhere.
+5. Concept sections: the big idea with something to drag, the parts with the video color code, and the key formulas side by side on one card, followed by the numbered "moves".
+6. Hands-on pair, right after the key formulas: one explorer where sliders drive the equation, the graph and the key points together (8.1: Build an ellipse), and one Quick check that drills the first decision every problem in the section starts with, with a new random question each time.
+7. One section per skill: a short routine, then each example as a card with numbered steps, the answer, a figure, and a margin rail with the video still and its QR code. Each example is followed by its Try It.
+8. Mistakes to avoid, each linking to the example where it comes up.
+9. Summary in four lines, with the summary PDF.
+10. Practice: a core set grouped by skill with the book's exercise numbers, each group linking back to its examples.
+11. Footer: clear-checkmarks button, OpenStax attribution, Timely Math Tutor credit.
+
+**Study tools every compendium has.**
+
+- Worked examples: a "One step at a time" button hides the steps (and the figure) so students predict each step before revealing it. Everything is shown by default.
+- Try It: a hint first (the same hint as `try_it.hint` in `course.yaml`), then the answer, then "I got it" and "Not yet? Back to Example n". "I got it" feeds the counts in the section bar and on the path cards.
+- Practice: answers open one problem at a time, and each problem has "Mark done". In the template the answers stay grouped in one `<details class="ans">` per set; the page splits them up after the math is typeset, and the printed answer key is built from the same lists.
+- Progress is saved in the student's browser only (`localStorage`, key `oca-<s>-progress`). Change the key and the skill-to-Try-It map (`SK`) in the script for each section.
+
+**Rules.**
+
+- Colors mean the same thing as in the videos. Math is MathJax with the color macros (`\ka`, `\kb`, `\kc`, `\kh`, `\kn`).
+- Dark by default, like every page on the site (see Good to know). Paper is always light.
+- Phones (900px and under): QR codes are hidden and become tap buttons, since a phone can't scan its own screen. Print keeps the QR codes and hides the interactive tools.
+- No page-wide sideways scrolling at phone width. Long equations scroll inside their own box.
+- Before publishing, load the page locally and check: no console errors, the section bar highlights as you scroll, every Try It has a hint, each practice problem shows its own answer, and the page looks right at phone width.
+
 ## Good to know
 
+- **Dark by default:** every page (index, video pages, compendiums) is dark unless the visitor clicks Light mode. The choice is saved in the browser as `tm-theme` and applies to the whole site. It does not follow the device's light or dark setting (Dan, 2026-11-10). For the index and video pages the colors are in `BASE_CSS` in `build.py`; a compendium carries its own copy in its template.
 - **Video pages:** every example with a video link has its own page, e.g. `.../8.1/6/`. The index's Watch buttons open it. A scheduled video's page says "Coming Nov 11" until it goes public. Previous and Next stand in for YouTube's end screen, which doesn't reliably show in embedded players.
 - **Try It:** a video page shows its example's Try It under the Previous and Next buttons, with the hint and the answer collapsed. The math is rendered by KaTeX (from cdnjs), loaded only on pages that have a Try It. Nothing else goes on video pages; section resources show on the index only (Dan, 2026-11-08).
 - **No slides:** the site doesn't post slides (Dan, 2026-11-08). Chapter 1's slide files were removed; they're in the git history.
