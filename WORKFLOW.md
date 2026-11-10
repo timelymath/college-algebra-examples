@@ -72,7 +72,7 @@ Change `build.py` once. Every page picks up the change on the next build.
 
 The 8.1 page (`8.1/compendium/`) is the model. Build each new one from its source so every section looks and works the same.
 
-**Source and build.** `OCA/Claude outputs/8.1 textbook mockup/`: `template.html` (the page), `build.py` (fills in QR codes, video stills and links; needs `segno`, so run it from a scratch venv) and `frames/` (one still per example video). `build.py` writes `compendium/<s>.html` in this repo plus a claude.ai mockup with dashed "New" notes. `template-v1.html` is the first design, kept for reference only. For a new section, copy the folder, replace the content, and keep the structure, CSS and scripts. Then add `compendium: compendium/<s>.html` to the section in `course.yaml`; the page is served at `<s>/compendium/`, and its "Section <s> Compendium" link replaces "Read the section" on the index.
+**Source and build.** `OCA/Claude outputs/8.1 textbook mockup/`: `template.html` (the page), `build.py` (fills in QR codes, video stills and links; needs `segno`, so run it from a scratch venv) and `frames/` (one still per example video). `build.py` writes `compendium/<s>.html` in this repo plus a claude.ai mockup with dashed "New" notes. For a new section, copy the folder, replace the content, and keep the structure, CSS and scripts. Then add `compendium: compendium/<s>.html` to the section in `course.yaml`; the page is served at `<s>/compendium/`, and its "Section <s> Compendium" link replaces "Read the section" on the index.
 
 **Page order.**
 
