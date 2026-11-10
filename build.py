@@ -172,7 +172,8 @@ def build():
     top_links += [chip(r) for r in c.get("resources") or []]
 
     page = TEMPLATE.format(
-        base_css=BASE_CSS, title=e(c["title"]), tagline=e(c["tagline"]), author=e(c.get("author", "")),
+        base_css=BASE_CSS, theme_head=THEME_HEAD, theme_btn=THEME_BTN, theme_js=THEME_JS,
+        title=e(c["title"]), tagline=e(c["tagline"]), author=e(c.get("author", "")),
         links="".join(top_links), toc=toc, posted=posted, total=len(all_ex),
         chapters="".join(chapter_block(ch) for ch in chapters),
     )
@@ -208,18 +209,47 @@ def build():
 
 
 BASE_CSS = """/* Clean Teal, matched to the videos: flat white cards on a cool gray page,
-   bold teal titles, muted letter-spaced eyebrows, outlined teal part circles. */
+   bold teal titles, muted letter-spaced eyebrows, outlined teal part circles.
+   Every page is dark by default. Light applies only when the reader picks it with the
+   Light mode button (saved as tm-theme, shared by every page on the site). */
 :root {
-  --bg:#F3F5F8; --card:#FFFFFF; --text:#1F2633; --muted:#8A93A3; --line:#E6EAF0;
-  --teal:#1F7A8C; --teal-ink:#FFFFFF; --coral:#D9573B; --pending:#C3CAD5;
+  --bg:#141A21; --card:#1D252F; --text:#E7EBF1; --muted:#8A93A3; --line:#2A333F;
+  --teal:#4DB3C6; --teal-ink:#0E1A20; --coral:#EC7A5F; --pending:#4A5463;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark) {
-  :root { --bg:#141A21; --card:#1D252F; --text:#E7EBF1; --muted:#8A93A3; --line:#2A333F;
-          --teal:#4DB3C6; --teal-ink:#0E1A20; --coral:#EC7A5F; --pending:#4A5463; }
+:root[data-theme="light"] {
+  --bg:#F3F5F8; --card:#FFFFFF; --text:#1F2633; --muted:#6B7484; --line:#E6EAF0;
+  --teal:#1F7A8C; --teal-ink:#FFFFFF; --coral:#D9573B; --pending:#C3CAD5;
+  color-scheme:light;
 }
 * { box-sizing:border-box; }
 body { margin:0; background:var(--bg); color:var(--text); font:16px/1.5 Arial, "Helvetica Neue", Helvetica, sans-serif; }
-a { color:var(--teal); }"""
+a { color:var(--teal); }
+.topline { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+.theme-btn { font:700 13px Arial, "Helvetica Neue", Helvetica, sans-serif; color:var(--muted); background:none;
+  border:1.5px solid var(--line); border-radius:999px; padding:5px 12px; cursor:pointer; }
+.theme-btn:hover { color:var(--teal); border-color:var(--teal); }
+.theme-btn:focus-visible { outline:2px solid var(--teal); outline-offset:2px; }"""
+
+# Dark is the default. A saved Light choice is applied before the page paints, so it never flashes dark first.
+THEME_HEAD = ("<script>try{if(localStorage.getItem('tm-theme')==='light')"
+              "document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>")
+THEME_BTN = '<button class="theme-btn" id="themeBtn" type="button">Light mode</button>'
+THEME_JS = """<script>
+(function () {
+  var b = document.getElementById('themeBtn'), root = document.documentElement;
+  if (!b) return;
+  function light() { return root.getAttribute('data-theme') === 'light'; }
+  function label() { b.textContent = light() ? 'Dark mode' : 'Light mode'; }
+  b.addEventListener('click', function () {
+    var next = light() ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('tm-theme', next); } catch (e) {}
+    label();
+  });
+  label();
+})();
+</script>"""
 
 
 VIDEO_TEMPLATE = """<!doctype html>
@@ -229,6 +259,7 @@ VIDEO_TEMPLATE = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title} · Section {sec} Example {n}</title>
 <meta name="description" content="Video walkthrough of Example {n} in Section {sec} of OpenStax College Algebra 2e: {title}.">
+{theme_head}
 <style>
 {base_css}
 .wrap {{ max-width:960px; margin:0 auto; padding:28px 16px 48px; }}
@@ -244,7 +275,7 @@ nav.steps {{ display:flex; justify-content:space-between; gap:16px; margin-top:2
   transition:border-color .15s, box-shadow .15s, transform .15s; }}
 .step:hover {{ border-color:var(--teal); box-shadow:0 3px 10px rgba(31,38,51,.12); transform:translateY(-1px); }}
 .step:focus-visible {{ outline:2px solid var(--teal); outline-offset:2px; }}
-.step .arrow {{ flex:none; width:40px; height:40px; border-radius:50%; display:grid; place-items:center; background:var(--teal); color:#fff; }}
+.step .arrow {{ flex:none; width:40px; height:40px; border-radius:50%; display:grid; place-items:center; background:var(--teal); color:var(--teal-ink); }}
 .step .arrow svg {{ width:18px; height:18px; }}
 .step .txt {{ min-width:0; }}
 .step .k {{ display:block; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; }}
@@ -261,13 +292,14 @@ nav.steps {{ display:flex; justify-content:space-between; gap:16px; margin-top:2
 </head>
 <body>
 <div class="wrap">
-  <div class="eyebrow">Section {sec} · Example {n}</div>
+  <div class="topline"><div class="eyebrow">Section {sec} · Example {n}</div>{theme_btn}</div>
   <h1>{title}</h1>
   {player}
   <nav class="steps">{prev}{next}</nav>{tryit}
   {resources}
   <p class="quiet"><a href="{home}#{anchor}">All examples</a>{yt}</p>
 </div>{scripts}
+{theme_js}
 </body>
 </html>
 """
@@ -387,7 +419,8 @@ def video_page(sec, ex, prev, nxt):
     resources = resources_block(sec, ex)
     head_extra, scripts = page_assets(ex)
     return VIDEO_TEMPLATE.format(
-        base_css=BASE_CSS, title=title, sec=e(sec["number"]), n=ex["n"], player=player, home=home,
+        base_css=BASE_CSS, theme_head=THEME_HEAD, theme_btn=THEME_BTN, theme_js=THEME_JS,
+        title=title, sec=e(sec["number"]), n=ex["n"], player=player, home=home,
         anchor=slug("ex", sec["number"], ex["n"]), yt=yt, resources=resources,
         tryit=try_it_block(sec, ex), head_extra=head_extra, scripts=scripts,
         prev=step_link("prev", prev, home), next=step_link("next", nxt, home))
@@ -400,6 +433,7 @@ TEMPLATE = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{tagline}">
+{theme_head}
 <style>
 {base_css}
 html {{ scroll-behavior:smooth; }}
@@ -475,7 +509,7 @@ footer {{ margin-top:44px; font-size:12px; color:var(--muted); }}
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">OpenStax College Algebra 2e</div>
+    <div class="topline"><div class="eyebrow">OpenStax College Algebra 2e</div>{theme_btn}</div>
     <h1>{title}</h1>
     <p class="tagline">{tagline}</p>
     <div class="chips">{links}</div>
@@ -521,6 +555,7 @@ footer {{ margin-top:44px; font-size:12px; color:var(--muted); }}
   }});
 }})();
 </script>
+{theme_js}
 </body>
 </html>
 """

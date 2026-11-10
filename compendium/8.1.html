@@ -9,29 +9,28 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<script>try{if(localStorage.getItem('tm-theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
 <style>
 :root{
   /* Layout: one reading column with a right-hand margin rail for video stills and QR codes, the way a textbook uses its margins */
-  --paper:#F3F5F8; --card:#FFFFFF; --ink:#1F2633; --muted:#5B6576; --rule:#D8DEE7; --soft:#E9EDF3;
-  --brand:#1F7A8C;
-  --a:#1F7A8C; --b:#5B4BC4; --c:#C23B72; --h:#D9573B; --n:#A86F05;
-  --a-tint:#E2F0F2; --b-tint:#ECEAFB; --c-tint:#F8E7EE; --n-tint:#FBF0D9; --h-tint:#FBE9E4;
+  /* Dark is the default on every course-site page. Light applies only when the reader picks it (data-theme="light"), and on paper. */
+  --paper:#12161C; --card:#1A2029; --ink:#E7ECF2; --muted:#9AA5B4; --rule:#2D3643; --soft:#242C37;
+  --brand:#56B8C9; --a:#56B8C9; --b:#A497F2; --c:#EE81AA; --h:#F28D70; --n:#E3AE48;
+  --a-tint:#173238; --b-tint:#26223F; --c-tint:#3A1D2A; --n-tint:#36290F; --h-tint:#3A231C; --ok:#6CCB8E; --ok-tint:#17301F;
   --qr-bg:#FFFFFF; --qr-fg:#14181F;
   --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
   --f-body:"Source Serif 4",Georgia,"Times New Roman",serif;
   --f-ui:"Archivo",Arial,sans-serif;
   --f-math:"Times New Roman",Times,serif;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#12161C; --card:#1A2029; --ink:#E7ECF2; --muted:#9AA5B4; --rule:#2D3643; --soft:#242C37;
-  --brand:#56B8C9; --a:#56B8C9; --b:#A497F2; --c:#EE81AA; --h:#F28D70; --n:#E3AE48;
-  --a-tint:#173238; --b-tint:#26223F; --c-tint:#3A1D2A; --n-tint:#36290F; --h-tint:#3A231C;
-  color-scheme:dark}}
-:root[data-theme="dark"]{
-  --paper:#12161C; --card:#1A2029; --ink:#E7ECF2; --muted:#9AA5B4; --rule:#2D3643; --soft:#242C37;
-  --brand:#56B8C9; --a:#56B8C9; --b:#A497F2; --c:#EE81AA; --h:#F28D70; --n:#E3AE48;
-  --a-tint:#173238; --b-tint:#26223F; --c-tint:#3A1D2A; --n-tint:#36290F; --h-tint:#3A231C;
-  color-scheme:dark}
+:root[data-theme="light"]{
+  --paper:#F3F5F8; --card:#FFFFFF; --ink:#1F2633; --muted:#5B6576; --rule:#D8DEE7; --soft:#E9EDF3;
+  --brand:#1F7A8C;
+  --a:#1F7A8C; --b:#5B4BC4; --c:#C23B72; --h:#D9573B; --n:#A86F05;
+  --a-tint:#E2F0F2; --b-tint:#ECEAFB; --c-tint:#F8E7EE; --n-tint:#FBF0D9; --h-tint:#FBE9E4;
+  --ok:#22764A; --ok-tint:#E1F2E7;
+  color-scheme:light}
 
 *{box-sizing:border-box}
 img{max-width:100%}
@@ -63,7 +62,7 @@ mjx-container[display="true"]{margin:.55em 0!important;overflow-x:auto;overflow-
 
 /* design notes */
 .dnote{display:none;border:1.5px dashed var(--n);background:var(--n-tint);border-radius:8px;padding:8px 12px;font-size:.88rem;line-height:1.45;color:var(--ink);margin-block:10px}
-.dnote::before{content:"Changed";display:inline-block;font:700 .68rem var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--n);margin-right:8px}
+.dnote::before{content:"New";display:inline-block;font:700 .68rem var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--n);margin-right:8px}
 .show-notes .dnote{display:block}
 
 /* header */
@@ -303,9 +302,15 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
 /* print: the QR codes are the point of paper */
 @media print{
   @page{size:letter;margin:.55in .6in}
-  :root{--paper:#fff}
+  :root,:root[data-theme]{
+  --paper:#F3F5F8; --card:#FFFFFF; --ink:#1F2633; --muted:#5B6576; --rule:#D8DEE7; --soft:#E9EDF3;
+  --brand:#1F7A8C;
+  --a:#1F7A8C; --b:#5B4BC4; --c:#C23B72; --h:#D9573B; --n:#A86F05;
+  --a-tint:#E2F0F2; --b-tint:#ECEAFB; --c-tint:#F8E7EE; --n-tint:#FBF0D9; --h-tint:#FBE9E4;
+  --ok:#22764A; --ok-tint:#E1F2E7;
+  --paper:#fff; color-scheme:light}
   body{font-size:10.5pt}
-  .mockbar,.toggle,.vid-link,.slider,details.ans,.dnote{display:none!important}
+  .mockbar,.toggle,.theme-btn,.vid-link,.slider,details.ans,.dnote{display:none!important}
   .wrap{max-width:none;padding:0}
   .hero .ray,.hero .pulse{animation:none}
   .ex{grid-template-columns:minmax(0,1fr) 1.15in;break-inside:avoid}
@@ -345,6 +350,134 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
   .interactive svg{max-width:4.4in}
   .mistakes{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+
+/* ================= v2: study tools ================= */
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--paper)}
+.sec,.ex,.tryit{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 68px)}
+.vid{top:calc(env(safe-area-inset-top,0px) + 72px)}
+.narrow-only{display:none}
+
+/* buttons shared by the study tools */
+.btn{font:700 .86rem var(--f-ui);border-radius:999px;padding:7px 15px;cursor:pointer;border:1.5px solid var(--brand);background:var(--card);color:var(--brand)}
+.btn.solid{background:var(--brand);color:var(--card)}
+.btn[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--card)}
+.btn:disabled{cursor:default;opacity:.6}
+
+/* section bar: stays at the top while you read */
+.secbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;margin-top:16px;background:var(--paper);border-bottom:1px solid var(--rule)}
+.secbar-in{display:flex;align-items:center;gap:8px;padding-block:8px}
+.secnav{position:relative;list-style:none;margin:0;padding:0;display:flex;gap:2px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+.secnav::-webkit-scrollbar{display:none}
+.secnav a{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none;font:650 .84rem var(--f-ui);color:var(--muted);padding:6px 10px;border-radius:999px}
+.secnav a b{font:800 .7rem/1 var(--f-display);color:var(--card);background:var(--muted);border-radius:4px;padding:3px 5px}
+.secnav a:hover{color:var(--ink);background:var(--soft)}
+.secnav a[aria-current="true"]{color:var(--card);background:var(--ink)}
+.secnav a[aria-current="true"] b{background:var(--brand)}
+.prog{flex:none;font:700 .8rem var(--f-ui);color:var(--brand);background:var(--a-tint);border-radius:999px;padding:6px 12px;text-decoration:none;white-space:nowrap;font-variant-numeric:tabular-nums}
+.prog.all{color:var(--ok);background:var(--ok-tint)}
+.fx-btn{flex:none;font:700 .8rem var(--f-ui);color:var(--ink);background:var(--card);border:1px solid var(--rule);border-radius:999px;padding:6px 12px;cursor:pointer}
+.fx-btn[aria-expanded="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.theme-btn{font:700 .8rem var(--f-ui);color:var(--muted);background:none;border:1px solid var(--rule);border-radius:999px;padding:5px 12px;cursor:pointer}
+.theme-btn:hover{color:var(--brand);border-color:var(--brand)}
+.bar-end{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap}
+.progline{height:2px;margin-bottom:-1px}
+.progline span{display:block;height:100%;width:0;background:var(--brand)}
+.fx{position:absolute;right:0;top:calc(100% + 8px);width:min(500px,100%);background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:14px 18px 12px;box-shadow:0 14px 40px rgba(10,20,35,.22);font-size:.92rem;max-height:calc(100vh - 130px);overflow:auto}
+.fx[data-open="false"]{visibility:hidden;pointer-events:none}
+.fx-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}
+.fx h4{font:700 .74rem var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fx ul{margin:4px 0 8px;padding-left:1.1em;display:grid;gap:3px}
+.fx a{font:700 .84rem var(--f-ui);text-decoration:none}
+
+/* path cards: Try It count */
+.skills .tick{font:700 .76rem var(--f-ui);color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+.skills .tick.all{color:var(--ok)}
+
+/* worked examples: one step at a time */
+.step-btn{margin-left:auto;font:700 .78rem var(--f-ui);color:var(--brand);background:var(--a-tint);border:0;border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap}
+.step-btn[aria-pressed="true"]{background:var(--brand);color:var(--card)}
+.step-off{display:none!important}
+.step-ctl{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;align-items:center;font:600 .86rem var(--f-ui);color:var(--muted);border-top:1px dashed var(--rule);padding-top:12px;margin-top:4px}
+
+/* Try It: hint, answer, got it */
+details.hint{margin-top:8px}
+details.hint>summary{font-family:var(--f-ui);cursor:pointer;font-weight:700;color:var(--n);font-size:.92rem;width:max-content}
+details.hint .ans-body{margin-top:6px;padding:10px 14px;border-radius:10px;background:var(--n-tint);font-size:.96rem}
+.rate{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-top:10px}
+.rate a{font:700 .86rem var(--f-ui);text-decoration:none}
+.tryit.done{border-color:var(--ok)}
+.tryit.done .tag::after{content:"✓ Done";display:block;margin-top:5px;font-size:.7rem;color:var(--ok)}
+
+/* build an ellipse */
+.lab{margin-top:18px;display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:10px 28px;align-items:start}
+.lab-head{grid-column:1/-1}
+.lab-head h3,.qc h3{font-size:1.08rem}
+.lab-head p{font-size:.93rem;color:var(--muted)}
+.lab-fig{margin:0}
+.lab-eq{min-height:4.6em;display:grid;place-items:center;background:var(--paper);border-radius:10px;padding:2px 10px}
+.lab-dir{font-size:.95rem;margin-top:10px;min-height:4.9em}
+.lab-ctl{display:grid;grid-template-columns:auto minmax(0,1fr) 2.2em;gap:8px 12px;align-items:center;margin-top:4px;font:600 .86rem var(--f-ui);color:var(--muted)}
+.lab-ctl input{width:100%;min-width:0;accent-color:var(--brand)}
+.lab-ctl output{font:800 .95rem var(--f-display);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.lab .facts{margin-top:14px;min-height:6.6em;align-content:start}
+.lab .facts .k-a,.lab .facts .k-b,.lab .facts .k-c,.lab .facts .k-h{font-family:var(--f-ui);font-weight:700;font-size:.88rem}
+.lab .facts li span.k-a{color:var(--a)} .lab .facts li span.k-b{color:var(--b)} .lab .facts li span.k-c{color:var(--c)} .lab .facts li span.k-h{color:var(--h)}
+
+/* quick check */
+.qc{margin-top:14px;border:1.5px solid var(--brand);border-radius:12px;background:var(--card);padding:14px 18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:4px 28px;align-items:center}
+.qc h3{grid-column:1/-1}
+.qc-eq{min-height:4.6em;display:grid;place-items:center}
+.qc-btns{display:flex;gap:10px;flex-wrap:wrap}
+.qc-fb{min-height:4.6em;font-size:.94rem;margin-top:8px}
+.qc-fb .ok{color:var(--ok)} .qc-fb .no{color:var(--h)}
+.qc .btn.right,.qc .btn.right:disabled{background:var(--ok);border-color:var(--ok);color:var(--card);opacity:1}
+.qc .btn.wrong,.qc .btn.wrong:disabled{background:var(--h-tint);border-color:var(--h);color:var(--h);opacity:1}
+.qc-foot{display:flex;gap:12px;align-items:center;flex-wrap:wrap;min-height:2.4em;font:600 .84rem var(--f-ui);color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* mistakes: where each one shows up */
+.mistakes .see{display:inline-block;margin-top:8px}
+
+/* practice: one answer at a time */
+.pa-row{display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;margin-top:3px}
+.pa-btn{font:700 .8rem var(--f-ui);color:var(--brand);background:none;border:0;padding:3px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.pa-done{font:700 .76rem var(--f-ui);color:var(--muted);background:none;border:1px solid var(--rule);border-radius:999px;padding:2px 10px;cursor:pointer}
+.pa-done[aria-pressed="true"]{color:var(--card);background:var(--ok);border-color:var(--ok)}
+.pa{margin-top:5px;padding:8px 12px;border-radius:10px;background:var(--paper);font-size:.95rem}
+.pset li.done>.n{color:var(--ok)}
+.pset ol>li>span:last-child{overflow-x:auto;overflow-y:hidden;padding-block:2px}
+.linkbtn{font:inherit;color:var(--brand);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+
+@media screen and (max-width:900px){
+  /* a QR code can't be scanned from the phone that's showing it: turn them into tap targets */
+  .wide-only{display:none}.narrow-only{display:inline}
+  .qr{display:none}
+  .vid{grid-template-columns:1fr}
+  .vid-link{flex-direction:row;align-items:center;gap:14px}
+  .vid-still{flex:0 0 min(46%,220px)}
+  .vid-title{font-size:1rem}
+  .watch{grid-template-columns:1fr;gap:8px}
+  .qtile{flex-direction:row;justify-content:space-between;text-align:left;border:1px solid var(--rule);border-radius:10px;padding:10px 14px;background:var(--paper)}
+  .qtile .qr-svg{display:none}
+  .qtile::after{content:"→";font:800 1.05rem var(--f-display);color:var(--brand)}
+  .summary .qtile{background:transparent;border-color:var(--muted)}
+  .summary .qtile::after{color:var(--card)}
+}
+@media screen and (max-width:720px){
+  .lab,.qc{grid-template-columns:1fr}
+  .lab-fig{max-width:340px;margin-inline:auto;width:100%}
+}
+@media screen and (max-width:560px){
+  .prog .lbl{display:none}
+  .prog::before{content:"✓ "}
+  .fx-row{grid-template-columns:1fr}
+}
+@media print{
+  .secbar,.lab,.qc,.step-btn,.step-ctl,.rate,details.hint,.pa-row,.pa,.mistakes .see,.linkbtn{display:none!important}
+  .steps>li.step-off{display:list-item!important}
+  .ex-fig.step-off,.callout.step-off{display:block!important}
+}
 </style>
 
 </head>
@@ -353,7 +486,7 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
 
 <nav class="mockbar" aria-label="Site">
   <a class="back" href="../../#sec-8-1">← College Algebra 2e, Example by Example</a>
-  <span><b>Section 8.1 Compendium</b></span>
+  <span class="bar-end"><b>Section 8.1 Compendium</b><button class="theme-btn" id="themeBtn" type="button">Light mode</button></span>
 </nav>
 
 <header class="top">
@@ -380,12 +513,44 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
     </ol>
   </div>
   <div class="watch">
-    <h2>Scan or tap</h2>
+    <h2><span class="wide-only">Scan or tap</span><span class="narrow-only">Watch or download</span></h2>
     <a class="qtile" href="https://www.youtube.com/playlist?list=PLcH_xb9X8DAs" target="_blank" rel="noopener"><svg role="img" aria-label="QR code: All 7 examples" viewBox="0 0 37 37" class="qr-svg"><path fill="#fff" d="M0 0h37v37h-37z"/><path class="qrline" stroke="#14181f" d="M2 2.5h7m1 0h4m1 0h1m2 0h6m1 0h1m2 0h7m-33 1h1m5 0h1m1 0h1m1 0h1m1 0h2m4 0h1m2 0h1m1 0h2m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m5 0h1m4 0h1m4 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h1m6 0h2m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m2 0h2m2 0h2m5 0h3m1 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m2 0h1m2 0h2m3 0h3m1 0h1m4 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m1 0h1m4 0h2m1 0h1m1 0h2m-24 1h1m1 0h2m1 0h3m1 0h1m4 0h1m1 0h4m1 0h1m1 0h2m1 0h1m2 0h1m1 0h2m-33 1h1m1 0h1m4 0h1m1 0h1m4 0h1m1 0h1m1 0h3m1 0h2m2 0h2m1 0h2m1 0h1m-33 1h3m2 0h3m1 0h2m3 0h1m1 0h2m2 0h1m2 0h1m2 0h4m1 0h2m-31 1h1m2 0h1m2 0h1m1 0h5m1 0h1m1 0h1m1 0h1m2 0h3m1 0h1m1 0h1m2 0h1m-33 1h4m1 0h2m1 0h2m2 0h1m5 0h2m1 0h3m1 0h1m3 0h1m1 0h2m-30 1h1m3 0h1m3 0h1m4 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h2m2 0h2m-27 1h5m1 0h2m2 0h2m1 0h3m3 0h1m1 0h3m-28 1h2m4 0h1m2 0h4m2 0h1m2 0h1m1 0h3m1 0h2m1 0h3m-31 1h2m2 0h1m1 0h1m3 0h2m2 0h3m3 0h3m2 0h2m1 0h3m-30 1h1m1 0h1m1 0h1m2 0h1m5 0h2m1 0h1m3 0h1m1 0h1m2 0h1m1 0h2m2 0h1m-33 1h1m1 0h1m1 0h3m2 0h1m1 0h2m2 0h3m2 0h2m3 0h4m1 0h1m-31 1h1m1 0h2m3 0h1m1 0h1m2 0h1m1 0h1m9 0h1m1 0h1m1 0h1m3 0h1m-33 1h3m1 0h5m1 0h3m5 0h5m1 0h1m2 0h1m1 0h2m-31 1h3m2 0h1m3 0h1m1 0h1m1 0h3m1 0h6m3 0h2m4 0h1m-28 1h3m2 0h5m1 0h1m1 0h1m3 0h2m1 0h2m4 0h2m-32 1h1m2 0h1m4 0h6m1 0h1m1 0h2m2 0h1m3 0h4m2 0h1m-33 1h1m2 0h5m5 0h1m1 0h1m1 0h1m4 0h8m-22 1h1m2 0h1m3 0h5m1 0h2m1 0h1m3 0h2m1 0h1m-32 1h7m1 0h3m2 0h1m2 0h1m2 0h1m2 0h3m1 0h1m1 0h1m-29 1h1m5 0h1m1 0h1m3 0h1m2 0h2m2 0h1m1 0h1m1 0h2m3 0h5m-33 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h3m1 0h1m2 0h1m1 0h7m1 0h1m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h2m3 0h3m1 0h3m2 0h1m4 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m2 0h3m3 0h1m2 0h7m1 0h1m-30 1h1m5 0h1m2 0h1m1 0h1m2 0h4m4 0h2m2 0h3m3 0h1m-33 1h7m1 0h2m2 0h1m2 0h5m1 0h1m1 0h1m2 0h1m1 0h3"/></svg><span><b>All 7 examples</b><small>YouTube playlist</small></span></a>
     <a class="qtile" href="https://youtu.be/rJO7l4uKaRc" target="_blank" rel="noopener"><svg role="img" aria-label="QR code: Section review" viewBox="0 0 33 33" class="qr-svg"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#14181f" d="M2 2.5h7m5 0h1m1 0h2m2 0h1m3 0h7m-29 1h1m5 0h1m5 0h4m3 0h2m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h6m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m1 0h2m2 0h2m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h2m10 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h1m1 0h5m1 0h4m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-20 1h7m1 0h4m-20 1h1m2 0h1m1 0h1m1 0h2m5 0h2m1 0h1m2 0h1m1 0h2m1 0h1m-27 1h3m1 0h2m1 0h1m1 0h3m1 0h2m1 0h1m1 0h2m1 0h2m1 0h5m-29 1h2m2 0h3m2 0h6m2 0h2m1 0h2m1 0h1m2 0h1m1 0h1m-29 1h3m2 0h1m3 0h2m3 0h1m1 0h2m3 0h1m2 0h2m1 0h2m-29 1h2m1 0h1m1 0h2m2 0h1m6 0h2m1 0h2m2 0h1m1 0h2m1 0h1m-29 1h2m5 0h3m2 0h1m2 0h1m6 0h1m1 0h1m1 0h3m-29 1h3m1 0h1m1 0h3m4 0h3m1 0h1m2 0h1m1 0h1m1 0h1m3 0h1m-26 1h1m4 0h4m4 0h2m3 0h3m1 0h1m-26 1h1m1 0h2m1 0h3m3 0h1m3 0h1m2 0h1m1 0h2m5 0h2m-29 1h2m1 0h3m2 0h1m2 0h1m1 0h1m2 0h1m1 0h1m2 0h5m2 0h1m-26 1h2m1 0h3m2 0h1m2 0h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h1m-24 1h1m1 0h1m1 0h2m3 0h1m2 0h3m5 0h1m1 0h2m-29 1h2m2 0h4m1 0h1m1 0h1m1 0h1m1 0h1m1 0h2m1 0h9m-21 1h2m5 0h4m1 0h1m3 0h1m1 0h1m1 0h1m-29 1h7m4 0h1m3 0h2m1 0h3m1 0h1m1 0h1m2 0h2m-29 1h1m5 0h1m4 0h2m3 0h1m2 0h2m3 0h2m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h2m1 0h3m2 0h1m2 0h6m2 0h1m-28 1h1m1 0h3m1 0h1m2 0h3m2 0h1m2 0h2m4 0h1m3 0h1m-28 1h1m1 0h3m1 0h1m4 0h1m2 0h2m2 0h4m3 0h4m-29 1h1m5 0h1m1 0h1m1 0h1m2 0h5m4 0h2m3 0h2m-29 1h7m10 0h1m2 0h2m2 0h1m2 0h1"/></svg><span><b>Section review</b><small>23-minute video</small></span></a>
     <a class="qtile" href="https://timelymath.github.io/college-algebra-examples/files/ch8/8.1-summary.pdf" target="_blank" rel="noopener"><svg role="img" aria-label="QR code: One-page summary" viewBox="0 0 41 41" class="qr-svg"><path fill="#fff" d="M0 0h41v41h-41z"/><path class="qrline" stroke="#14181f" d="M2 2.5h7m4 0h2m1 0h1m4 0h3m1 0h2m1 0h1m1 0h1m1 0h7m-37 1h1m5 0h1m4 0h1m1 0h1m2 0h1m10 0h2m1 0h1m5 0h1m-37 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h2m3 0h3m2 0h1m1 0h3m1 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m1 0h2m2 0h3m1 0h2m1 0h1m4 0h4m2 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h1m3 0h3m2 0h1m2 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-37 1h1m5 0h1m1 0h1m1 0h4m2 0h1m1 0h1m2 0h2m2 0h1m1 0h2m1 0h1m5 0h1m-37 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-29 1h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h3m3 0h3m-29 1h1m1 0h5m5 0h1m1 0h1m1 0h2m1 0h1m2 0h1m2 0h1m4 0h5m-34 1h1m1 0h2m2 0h2m5 0h2m2 0h2m2 0h3m3 0h1m2 0h1m2 0h2m-35 1h6m2 0h2m1 0h6m2 0h1m1 0h1m1 0h1m1 0h2m1 0h2m4 0h2m-37 1h1m4 0h1m3 0h1m5 0h1m5 0h1m1 0h1m3 0h2m1 0h3m3 0h1m-37 1h1m2 0h8m2 0h1m1 0h1m1 0h1m1 0h1m2 0h2m1 0h2m2 0h8m-37 1h1m1 0h1m2 0h1m2 0h1m2 0h2m3 0h1m1 0h4m1 0h1m1 0h1m2 0h1m2 0h1m-29 1h1m2 0h2m1 0h1m1 0h1m1 0h4m7 0h10m2 0h1m-37 1h1m6 0h4m4 0h2m1 0h1m1 0h3m1 0h1m1 0h2m1 0h4m2 0h2m-35 1h2m2 0h1m1 0h1m5 0h2m1 0h1m1 0h2m1 0h5m2 0h2m1 0h1m1 0h1m1 0h1m-37 1h3m1 0h2m1 0h3m1 0h2m2 0h2m1 0h3m1 0h4m2 0h2m1 0h1m3 0h1m-35 1h3m2 0h6m1 0h2m6 0h1m2 0h1m2 0h2m6 0h2m-35 1h2m1 0h1m1 0h1m1 0h2m5 0h1m2 0h1m1 0h2m1 0h1m2 0h1m1 0h2m5 0h1m-37 1h3m2 0h3m5 0h1m3 0h2m3 0h4m2 0h3m1 0h1m1 0h1m-34 1h2m4 0h1m2 0h4m2 0h1m1 0h4m1 0h1m4 0h1m4 0h1m-34 1h4m1 0h2m2 0h1m3 0h1m1 0h3m2 0h3m1 0h2m1 0h1m2 0h4m1 0h2m-35 1h3m2 0h7m2 0h1m1 0h5m3 0h4m1 0h2m-33 1h4m2 0h1m1 0h1m2 0h6m1 0h3m1 0h1m2 0h2m3 0h3m1 0h1m1 0h1m-37 1h2m1 0h2m3 0h2m2 0h4m1 0h4m2 0h3m2 0h1m2 0h1m1 0h2m-35 1h1m2 0h1m1 0h3m1 0h1m2 0h5m3 0h1m1 0h1m2 0h3m1 0h1m1 0h1m1 0h1m1 0h2m-37 1h1m1 0h3m2 0h1m1 0h1m2 0h2m1 0h1m5 0h3m4 0h5m2 0h1m-36 1h1m1 0h3m1 0h1m1 0h2m1 0h3m1 0h1m1 0h1m5 0h1m1 0h11m-28 1h1m5 0h1m1 0h1m1 0h3m2 0h1m1 0h1m1 0h2m3 0h2m1 0h1m-36 1h7m5 0h4m2 0h1m1 0h3m5 0h1m1 0h1m1 0h1m1 0h3m-37 1h1m5 0h1m1 0h1m1 0h1m2 0h4m1 0h2m1 0h2m1 0h1m3 0h1m3 0h2m-34 1h1m1 0h3m1 0h1m1 0h2m3 0h1m4 0h1m3 0h4m1 0h6m1 0h1m1 0h1m-37 1h1m1 0h3m1 0h1m1 0h2m1 0h2m2 0h2m1 0h3m2 0h2m1 0h1m2 0h2m1 0h2m2 0h1m-37 1h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h1m1 0h3m8 0h2m-37 1h1m5 0h1m2 0h2m1 0h1m1 0h1m1 0h1m3 0h3m1 0h1m1 0h4m2 0h1m3 0h1m-37 1h7m1 0h1m1 0h1m2 0h2m2 0h1m1 0h1m2 0h5m2 0h1m2 0h5"/></svg><span><b>One-page summary</b><small>Printable PDF</small></span></a>
   </div>
 </section>
+
+<nav class="secbar" aria-label="Parts of this section">
+  <div class="secbar-in">
+    <ol class="secnav">
+      <li><a href="#idea">The idea</a></li>
+      <li><a href="#parts">Parts</a></li>
+      <li><a href="#forms">Standard form</a></li>
+      <li><a href="#skill-a"><b>A</b>Write</a></li>
+      <li><a href="#skill-b"><b>B</b>Graph</a></li>
+      <li><a href="#skill-c"><b>C</b>General form</a></li>
+      <li><a href="#skill-d"><b>D</b>Apply</a></li>
+      <li><a href="#mistakes">Mistakes</a></li>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#practice">Practice</a></li>
+    </ol>
+    <a class="prog" id="progChip" href="#try1"><span class="lbl">Try Its </span>0/7</a>
+    <button class="fx-btn" id="fxBtn" type="button" aria-expanded="false" aria-controls="fxPanel">Formulas</button>
+  </div>
+  <div class="progline" aria-hidden="true"><span id="progLine"></span></div>
+  <div class="fx" id="fxPanel" data-open="false" role="region" aria-label="Formulas for Section 8.1">
+    <div class="fx-row">
+      <div><h4>Horizontal</h4>$$\frac{(x-\kh{h})^2}{\ka{a}^2}+\frac{(y-\kh{k})^2}{\kb{b}^2}=1$$</div>
+      <div><h4>Vertical</h4>$$\frac{(x-\kh{h})^2}{\kb{b}^2}+\frac{(y-\kh{k})^2}{\ka{a}^2}=1$$</div>
+    </div>
+    <ul>
+      <li>The bigger denominator is $\ka{a}^2$. Its variable gives the long direction.</li>
+      <li>$\kc{c}^2=\ka{a}^2-\kb{b}^2$, so $\ka{a}$ is the largest.</li>
+      <li>From the center $\kh{(h,k)}$: vertices are $\ka{a}$ away, co-vertices $\kb{b}$, foci $\kc{c}$.</li>
+    </ul>
+    <a href="#forms">Open the full standard form card</a>
+  </div>
+</nav>
 
 <!-- ============ THE BIG IDEA ============ -->
 <section class="sec" id="idea">
@@ -489,6 +654,31 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
     <li><b>Flip the signs for the center.</b>$(x+2)^2$ means $x-(-2)$, so $\kh{h}=-2$.</li>
     <li><b>The bigger denominator is $\ka{a}^2$.</b>Its variable tells you the long direction.</li>
   </ol>
+  <div class="lab panel" id="lab">
+    <div class="lab-head"><h3>Build an ellipse</h3><p>Move the sliders. The equation, the graph, and the key points change together.</p></div>
+    <figure class="lab-fig"><svg id="labFig" role="img" aria-label="A graph of the ellipse described by the equation beside it. It updates as the sliders move."></svg></figure>
+    <div class="lab-side">
+      <div class="lab-eq" id="labEq"></div>
+      <p class="lab-dir" id="labDir"></p>
+      <div class="lab-ctl">
+        <label for="labP">Under the <i>x</i> part</label><input id="labP" type="range" min="1" max="6" value="5"><output id="labPo" for="labP">25</output>
+        <label for="labQ">Under the <i>y</i> part</label><input id="labQ" type="range" min="1" max="6" value="3"><output id="labQo" for="labQ">9</output>
+        <label for="labH">Center, <i>h</i></label><input id="labH" type="range" min="-3" max="3" value="1"><output id="labHo" for="labH">1</output>
+        <label for="labK">Center, <i>k</i></label><input id="labK" type="range" min="-3" max="3" value="-2"><output id="labKo" for="labK">−2</output>
+      </div>
+      <ul class="facts" id="labFacts"></ul>
+    </div>
+  </div>
+  <div class="qc" id="qc">
+    <h3>Quick check: which way does it stretch?</h3>
+    <div class="qc-eq" id="qcEq">$$\frac{(x+2)^2}{9}+\frac{(y-1)^2}{25}=1$$</div>
+    <div>
+      <div class="qc-btns"><button type="button" class="btn" data-a="h">Horizontal</button><button type="button" class="btn" data-a="v">Vertical</button></div>
+      <p class="qc-fb" id="qcFb" aria-live="polite"></p>
+      <div class="qc-foot"><button type="button" class="btn solid" id="qcNext" hidden>Another one</button><span id="qcScore"></span></div>
+    </div>
+  </div>
+
 </section>
 
 <!-- ============ SKILL A ============ -->
@@ -527,10 +717,11 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
       <a class="qr" href="https://youtu.be/XLMdJZ7BRXM" target="_blank" rel="noopener"><svg role="img" aria-label="QR code: Example 1 video" viewBox="0 0 33 33" class="qr-svg"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#14181f" d="M2 2.5h7m1 0h1m2 0h1m1 0h1m1 0h2m1 0h1m3 0h7m-29 1h1m5 0h1m1 0h2m3 0h1m3 0h3m2 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h4m3 0h2m3 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m1 0h2m4 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h1m2 0h2m1 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h2m3 0h7m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h6m1 0h4m1 0h1m-20 1h2m1 0h1m1 0h2m4 0h1m2 0h2m1 0h2m2 0h1m1 0h5m-27 1h3m2 0h1m2 0h1m1 0h2m3 0h1m1 0h2m4 0h2m1 0h1m-28 1h1m1 0h2m1 0h1m1 0h1m1 0h4m6 0h1m5 0h3m-29 1h1m1 0h1m1 0h2m2 0h2m3 0h3m1 0h1m3 0h4m2 0h1m-28 1h1m2 0h4m2 0h3m1 0h1m3 0h1m2 0h1m1 0h2m2 0h1m-27 1h6m1 0h1m3 0h1m1 0h2m2 0h2m1 0h4m-23 1h1m1 0h2m1 0h2m3 0h2m1 0h1m3 0h1m4 0h1m2 0h3m-29 1h1m2 0h1m1 0h1m1 0h5m5 0h1m1 0h1m1 0h3m4 0h1m-27 1h1m3 0h1m1 0h1m1 0h2m1 0h4m1 0h2m2 0h1m1 0h2m1 0h1m-24 1h1m4 0h2m2 0h5m1 0h2m1 0h1m3 0h3m-29 1h1m3 0h3m1 0h2m2 0h1m2 0h2m3 0h2m2 0h1m1 0h3m-28 1h1m2 0h2m2 0h2m1 0h4m1 0h3m3 0h1m4 0h1m-28 1h1m1 0h1m2 0h2m2 0h2m4 0h4m1 0h5m1 0h2m-20 1h2m1 0h4m1 0h1m3 0h1m3 0h1m2 0h2m-29 1h7m1 0h3m1 0h1m3 0h2m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m-29 1h1m5 0h1m2 0h1m1 0h4m5 0h1m3 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h1m6 0h6m1 0h2m-29 1h1m1 0h3m1 0h1m3 0h3m2 0h1m4 0h2m2 0h1m1 0h1m-27 1h1m1 0h3m1 0h1m1 0h2m1 0h2m4 0h1m1 0h1m3 0h4m1 0h1m-29 1h1m5 0h1m1 0h1m5 0h2m1 0h1m1 0h1m3 0h1m3 0h1m-28 1h7m3 0h1m2 0h1m2 0h2m1 0h3m2 0h1m2 0h2"/></svg><span>Scan to watch on your phone<br><b>Example 1 · 3:50</b></span></a>
     </aside>
   </div>
-  <div class="tryit">
+  <div class="tryit" id="try1" data-try="1">
     <p class="tag">Try It<span>#1</span></p>
     <div>
       <p>What is the standard form equation of the ellipse that has vertices $(0,\,\pm4)$ and foci $\left(0,\,\pm\sqrt{15}\right)$?</p>
+      <details class="hint"><summary>Need a hint?</summary><div class="ans-body">The vertices and foci are on the $y$-axis, so the major axis is vertical. Start from $\dfrac{x^2}{b^2} + \dfrac{y^2}{a^2} = 1$, read $a$ off the vertices and $c$ off the foci, then use $c^2 = a^2 - b^2$ to find $b^2$.</div></details>
       <details class="ans" data-label="Try It #1"><summary>Check your answer</summary><div class="ans-body">$x^2+\dfrac{y^2}{16}=1$<p class="why">Vertical, $a=4$, $c=\sqrt{15}$, so $15=16-b^2$ and $b^2=1$.</p></div></details>
     </div>
   </div>
@@ -558,10 +749,11 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
       <a class="qr" href="https://youtu.be/NFZyYqgxS9k" target="_blank" rel="noopener"><svg role="img" aria-label="QR code: Example 2 video" viewBox="0 0 33 33" class="qr-svg"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#14181f" d="M2 2.5h7m2 0h1m1 0h5m2 0h3m1 0h7m-29 1h1m5 0h1m1 0h1m2 0h2m1 0h5m3 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m1 0h3m1 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h2m4 0h1m1 0h1m1 0h2m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h2m4 0h2m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m3 0h2m2 0h1m2 0h1m1 0h2m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-20 1h5m2 0h4m-19 1h3m1 0h2m3 0h1m4 0h1m4 0h1m5 0h2m-28 1h1m1 0h1m1 0h2m1 0h2m1 0h2m3 0h1m2 0h2m2 0h5m1 0h1m-29 1h3m2 0h3m3 0h3m2 0h3m3 0h1m4 0h1m-28 1h1m2 0h1m3 0h2m1 0h2m1 0h2m9 0h1m3 0h1m-29 1h1m4 0h4m2 0h1m1 0h5m3 0h1m1 0h1m3 0h2m-29 1h1m4 0h1m2 0h1m2 0h1m1 0h1m1 0h1m1 0h3m2 0h2m1 0h2m-25 1h3m1 0h1m1 0h1m2 0h1m7 0h2m1 0h4m1 0h2m-29 1h1m2 0h3m2 0h1m1 0h1m1 0h1m5 0h1m5 0h2m2 0h1m-28 1h6m5 0h4m1 0h1m1 0h1m1 0h1m3 0h1m1 0h2m-28 1h1m1 0h1m3 0h1m2 0h1m2 0h2m4 0h2m2 0h1m-24 1h1m1 0h1m2 0h2m1 0h1m1 0h1m1 0h1m1 0h1m7 0h3m1 0h1m-25 1h4m5 0h2m2 0h4m1 0h7m-26 1h2m2 0h2m1 0h3m1 0h6m2 0h5m2 0h1m-20 1h2m3 0h2m1 0h5m3 0h2m1 0h2m-29 1h7m2 0h1m1 0h1m1 0h1m4 0h3m1 0h1m1 0h1m1 0h1m-27 1h1m5 0h1m1 0h2m2 0h6m2 0h1m3 0h1m2 0h2m-29 1h1m1 0h3m1 0h1m3 0h2m2 0h3m3 0h7m-27 1h1m1 0h3m1 0h1m1 0h3m1 0h3m4 0h1m4 0h1m2 0h1m-28 1h1m1 0h3m1 0h1m1 0h2m2 0h3m2 0h2m1 0h1m2 0h1m1 0h2m1 0h1m-29 1h1m5 0h1m1 0h1m3 0h4m2 0h3m3 0h2m1 0h1m-28 1h7m4 0h3m4 0h6m1 0h1m1 0h1"/></svg><span>Scan to watch on your phone<br><b>Example 2 · 4:19</b></span></a>
     </aside>
   </div>
-  <div class="tryit">
+  <div class="tryit" id="try2" data-try="2">
     <p class="tag">Try It<span>#2</span></p>
     <div>
       <p>What is the standard form equation of the ellipse that has vertices $(-3,3)$ and $(5,3)$ and foci $\left(1-2\sqrt3,\,3\right)$ and $\left(1+2\sqrt3,\,3\right)$?</p>
+      <details class="hint"><summary>Need a hint?</summary><div class="ans-body">The vertices share $y = 3$, so the major axis is horizontal: $\dfrac{(x-h)^2}{a^2} + \dfrac{(y-k)^2}{b^2} = 1$. The center is the midpoint of the vertices, $a$ is the distance from the center to a vertex, and $c$ is the distance from the center to a focus.</div></details>
       <details class="ans" data-label="Try It #2"><summary>Check your answer</summary><div class="ans-body">$\dfrac{(x-1)^2}{16}+\dfrac{(y-3)^2}{4}=1$<p class="why">Center $(1,3)$, $a=4$, $c=2\sqrt3$, so $12=16-b^2$ and $b^2=4$.</p></div></details>
     </div>
   </div>
@@ -608,10 +800,11 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
       <a class="qr" href="https://youtu.be/1Om18-69vHQ" target="_blank" rel="noopener"><svg role="img" aria-label="QR code: Example 3 video" viewBox="0 0 33 33" class="qr-svg"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#14181f" d="M2 2.5h7m1 0h2m1 0h1m1 0h2m5 0h1m1 0h7m-29 1h1m5 0h1m2 0h1m1 0h1m3 0h1m6 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m4 0h1m2 0h3m5 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h2m6 0h1m1 0h2m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h3m3 0h2m1 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h5m2 0h2m1 0h1m1 0h1m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-20 1h2m2 0h1m1 0h2m2 0h2m-20 1h7m5 0h2m1 0h1m1 0h2m3 0h2m3 0h1m-29 1h1m3 0h1m3 0h1m1 0h1m1 0h1m2 0h2m1 0h1m1 0h3m1 0h1m3 0h1m-28 1h3m2 0h1m2 0h1m1 0h1m1 0h2m6 0h2m1 0h2m-25 1h1m2 0h1m3 0h2m1 0h1m2 0h1m3 0h5m2 0h1m1 0h1m-28 1h1m4 0h4m2 0h1m1 0h5m3 0h1m1 0h1m3 0h2m-27 1h2m5 0h1m2 0h1m1 0h1m4 0h4m1 0h2m2 0h1m-27 1h1m1 0h1m1 0h3m1 0h7m1 0h1m1 0h1m1 0h2m3 0h1m-25 1h1m1 0h1m2 0h1m3 0h1m5 0h1m5 0h2m2 0h1m-28 1h1m2 0h3m2 0h6m3 0h4m1 0h1m1 0h2m1 0h1m-29 1h6m2 0h2m1 0h1m2 0h3m1 0h3m1 0h1m1 0h5m-29 1h1m2 0h1m1 0h3m2 0h1m3 0h1m5 0h1m1 0h5m-27 1h1m1 0h1m1 0h1m3 0h2m1 0h1m2 0h1m1 0h1m5 0h1m1 0h2m1 0h1m-28 1h1m1 0h7m5 0h1m2 0h8m1 0h1m1 0h1m-21 1h2m3 0h2m1 0h5m3 0h2m1 0h2m-29 1h7m1 0h1m3 0h1m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m2 0h1m-28 1h1m5 0h1m1 0h1m5 0h1m2 0h4m3 0h2m-26 1h1m1 0h3m1 0h1m1 0h4m1 0h1m1 0h2m3 0h7m-27 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h5m1 0h1m1 0h2m-27 1h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h4m1 0h7m1 0h1m-28 1h1m5 0h1m1 0h1m3 0h4m2 0h3m3 0h1m2 0h1m-28 1h7m2 0h1m3 0h3m1 0h1m3 0h2m1 0h3"/></svg><span>Scan to watch on your phone<br><b>Example 3 · 2:18</b></span></a>
     </aside>
   </div>
-  <div class="tryit">
+  <div class="tryit" id="try3" data-try="3">
     <p class="tag">Try It<span>#3</span></p>
     <div>
       <p>Graph $\dfrac{x^2}{36}+\dfrac{y^2}{4}=1$. Identify and label the center, vertices, co-vertices, and foci.</p>
+      <details class="hint"><summary>Need a hint?</summary><div class="ans-body">The larger denominator, $36$, is under $x^2$, so the major axis is horizontal: $a^2 = 36$ and $b^2 = 4$. Then find $c$ from $c^2 = a^2 - b^2$.</div></details>
       <details class="ans" data-label="Try It #3"><summary>Check your answer</summary><div class="ans-body">Center $(0,0)$; vertices $(\pm6,0)$; co-vertices $(0,\pm2)$; foci $\left(\pm4\sqrt2,\,0\right)$, since $c^2=36-4=32$.</div></details>
     </div>
   </div>
@@ -643,10 +836,11 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
       <a class="qr" href="https://youtu.be/Gd6DpE06EPc" target="_blank" rel="noopener"><svg role="img" aria-label="QR code: Example 4 video" viewBox="0 0 33 33" class="qr-svg"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#14181f" d="M2 2.5h7m2 0h1m2 0h1m1 0h2m1 0h2m3 0h7m-29 1h1m5 0h1m5 0h1m5 0h1m3 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m2 0h1m3 0h1m1 0h2m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h3m4 0h2m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m8 0h3m4 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h4m1 0h2m1 0h2m2 0h1m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h3m1 0h3m1 0h1m1 0h3m-20 1h2m3 0h1m3 0h2m4 0h3m3 0h2m1 0h1m-25 1h2m1 0h2m1 0h1m1 0h4m1 0h2m4 0h1m2 0h1m1 0h1m1 0h2m-25 1h3m1 0h4m3 0h3m1 0h1m1 0h1m1 0h2m3 0h1m-29 1h3m1 0h1m3 0h1m3 0h1m1 0h1m5 0h1m1 0h1m2 0h1m-26 1h2m2 0h1m1 0h2m2 0h2m7 0h4m2 0h1m1 0h1m-28 1h1m1 0h1m6 0h1m4 0h2m2 0h3m1 0h1m2 0h1m-26 1h2m3 0h2m2 0h2m1 0h2m1 0h1m1 0h3m2 0h1m2 0h2m1 0h1m-28 1h1m3 0h1m2 0h1m5 0h2m5 0h1m3 0h1m1 0h2m-29 1h3m1 0h1m1 0h4m3 0h1m2 0h3m1 0h3m-22 1h2m1 0h2m5 0h2m1 0h1m1 0h1m3 0h4m1 0h1m2 0h1m-29 1h2m2 0h1m1 0h1m4 0h3m2 0h2m1 0h2m2 0h4m1 0h1m-27 1h1m1 0h1m2 0h2m5 0h3m1 0h6m-24 1h4m2 0h2m2 0h2m1 0h1m2 0h1m1 0h7m-17 1h2m2 0h6m1 0h2m3 0h2m2 0h1m-29 1h7m3 0h7m3 0h1m1 0h1m1 0h5m-29 1h1m5 0h1m5 0h1m1 0h2m1 0h1m1 0h2m3 0h2m1 0h1m-28 1h1m1 0h3m1 0h1m6 0h1m1 0h1m1 0h1m1 0h6m3 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m1 0h3m3 0h1m1 0h2m2 0h3m1 0h1m-28 1h1m1 0h3m1 0h1m1 0h1m2 0h3m1 0h1m5 0h1m2 0h2m1 0h2m-29 1h1m5 0h1m1 0h2m2 0h3m4 0h2m4 0h1m-26 1h7m2 0h3m3 0h2m2 0h8m1 0h1"/></svg><span>Scan to watch on your phone<br><b>Example 4 · 2:41</b></span></a>
     </aside>
   </div>
-  <div class="tryit">
+  <div class="tryit" id="try4" data-try="4">
     <p class="tag">Try It<span>#4</span></p>
     <div>
       <p>Graph $49x^2+16y^2=784$. Rewrite the equation in standard form, then identify and label the center, vertices, co-vertices, and foci.</p>
+      <details class="hint"><summary>Need a hint?</summary><div class="ans-body">Standard form has $1$ on the right side, so divide every term by $784$ and simplify each fraction. Then the larger denominator tells you which way the ellipse stretches.</div></details>
       <details class="ans" data-label="Try It #4"><summary>Check your answer</summary><div class="ans-body">$\dfrac{x^2}{16}+\dfrac{y^2}{49}=1$. Center $(0,0)$; vertices $(0,\pm7)$; co-vertices $(\pm4,0)$; foci $\left(0,\pm\sqrt{33}\right)$, since $c^2=49-16=33$.</div></details>
     </div>
   </div>
@@ -678,10 +872,11 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
       <a class="qr" href="https://youtu.be/0hI8JdPbDGQ" target="_blank" rel="noopener"><svg role="img" aria-label="QR code: Example 5 video" viewBox="0 0 33 33" class="qr-svg"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#14181f" d="M2 2.5h7m2 0h2m3 0h1m2 0h1m1 0h1m2 0h7m-29 1h1m5 0h1m1 0h1m2 0h4m4 0h1m2 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m3 0h2m1 0h2m5 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h4m4 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m4 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h1m2 0h2m3 0h2m1 0h1m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h3m2 0h1m2 0h1m-16 1h1m1 0h4m1 0h1m4 0h1m4 0h1m2 0h2m1 0h2m1 0h1m-28 1h2m1 0h1m1 0h1m3 0h3m3 0h2m1 0h1m4 0h2m1 0h2m-27 1h1m1 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m2 0h4m2 0h1m-26 1h1m1 0h1m1 0h1m1 0h1m2 0h3m1 0h2m1 0h2m1 0h1m2 0h1m1 0h1m2 0h1m-29 1h2m2 0h1m1 0h2m2 0h2m3 0h1m3 0h4m2 0h1m1 0h1m-28 1h2m5 0h2m3 0h2m1 0h1m6 0h1m1 0h1m1 0h3m-29 1h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h2m1 0h2m2 0h3m1 0h2m1 0h1m1 0h2m-28 1h2m1 0h1m7 0h2m1 0h2m1 0h1m1 0h1m1 0h1m1 0h4m-28 1h1m1 0h1m3 0h1m2 0h2m1 0h3m2 0h4m2 0h3m2 0h1m-29 1h1m1 0h1m2 0h1m1 0h1m4 0h1m1 0h1m2 0h2m1 0h3m1 0h1m1 0h1m-27 1h3m1 0h1m1 0h2m5 0h1m2 0h2m1 0h2m2 0h4m1 0h1m-29 1h3m1 0h1m3 0h1m3 0h2m1 0h2m3 0h3m3 0h1m-27 1h2m1 0h1m1 0h2m1 0h1m1 0h2m1 0h2m1 0h10m-18 1h1m1 0h1m4 0h1m1 0h4m3 0h3m-27 1h7m2 0h4m1 0h2m3 0h2m1 0h1m1 0h1m1 0h2m-28 1h1m5 0h1m1 0h4m2 0h3m1 0h3m3 0h2m1 0h2m-29 1h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h2m1 0h1m1 0h6m3 0h1m-29 1h1m1 0h3m1 0h1m1 0h5m4 0h2m4 0h1m1 0h1m1 0h1m-28 1h1m1 0h3m1 0h1m4 0h5m1 0h1m2 0h2m1 0h2m2 0h2m-29 1h1m5 0h1m1 0h6m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m1 0h1m-29 1h7m2 0h1m1 0h1m1 0h1m1 0h1m3 0h3m1 0h3"/></svg><span>Scan to watch on your phone<br><b>Example 5 · 2:57</b></span></a>
     </aside>
   </div>
-  <div class="tryit">
+  <div class="tryit" id="try5" data-try="5">
     <p class="tag">Try It<span>#5</span></p>
     <div>
       <p>Graph $\dfrac{(x-4)^2}{36}+\dfrac{(y-2)^2}{20}=1$. Identify and label the center, vertices, co-vertices, and foci.</p>
+      <details class="hint"><summary>Need a hint?</summary><div class="ans-body">The center is $(h, k) = (4, 2)$. The larger denominator, $36$, is under the $x$ part, so $a = 6$ runs left and right from the center, and $b = \sqrt{20} = 2\sqrt{5}$ runs up and down.</div></details>
       <details class="ans" data-label="Try It #5"><summary>Check your answer</summary><div class="ans-body">Center $(4,2)$; vertices $(-2,2)$ and $(10,2)$; co-vertices $\left(4,\,2\pm2\sqrt5\right)$; foci $(0,2)$ and $(8,2)$, since $c^2=36-20=16$.</div></details>
     </div>
   </div>
@@ -722,10 +917,11 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
       <a class="qr" href="https://youtu.be/8H1h4RHAxRY" target="_blank" rel="noopener"><svg role="img" aria-label="QR code: Example 6 video" viewBox="0 0 33 33" class="qr-svg"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#14181f" d="M2 2.5h7m1 0h1m2 0h4m1 0h1m5 0h7m-29 1h1m5 0h1m1 0h2m3 0h1m1 0h1m1 0h3m2 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m4 0h1m3 0h2m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m1 0h2m1 0h1m2 0h3m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h2m1 0h1m4 0h2m1 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m7 0h4m1 0h2m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h2m1 0h2m2 0h4m1 0h1m-20 1h2m1 0h1m1 0h2m1 0h1m5 0h1m2 0h2m2 0h1m1 0h5m-28 1h1m2 0h1m2 0h1m2 0h1m1 0h2m3 0h1m1 0h2m4 0h2m1 0h1m-28 1h1m1 0h2m1 0h2m2 0h1m1 0h2m1 0h1m4 0h1m3 0h1m1 0h3m-29 1h1m2 0h3m1 0h3m2 0h4m1 0h1m1 0h1m1 0h2m4 0h1m-28 1h1m2 0h4m2 0h2m2 0h1m1 0h1m1 0h1m1 0h2m1 0h2m2 0h1m-27 1h4m1 0h1m1 0h1m3 0h1m2 0h1m2 0h2m1 0h4m4 0h1m-29 1h1m2 0h2m1 0h2m1 0h5m4 0h1m3 0h2m2 0h1m1 0h1m-29 1h2m1 0h2m2 0h5m1 0h1m3 0h1m1 0h1m1 0h3m4 0h1m-27 1h1m1 0h1m1 0h1m3 0h4m1 0h2m1 0h2m1 0h3m1 0h1m1 0h1m-25 1h3m3 0h2m1 0h6m2 0h2m1 0h1m1 0h4m-29 1h1m1 0h1m1 0h3m2 0h1m1 0h2m2 0h2m4 0h1m2 0h1m1 0h3m-28 1h1m2 0h2m3 0h1m1 0h1m1 0h2m1 0h4m2 0h4m1 0h1m-28 1h1m1 0h1m2 0h3m1 0h2m4 0h4m1 0h6m1 0h1m-20 1h2m1 0h4m1 0h1m3 0h1m3 0h1m2 0h2m-29 1h7m1 0h3m1 0h1m3 0h2m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m-29 1h1m5 0h1m3 0h3m7 0h1m3 0h1m-25 1h1m1 0h3m1 0h1m1 0h7m5 0h6m1 0h2m-29 1h1m1 0h3m1 0h1m4 0h1m2 0h2m4 0h2m2 0h2m-26 1h1m1 0h3m1 0h1m1 0h2m7 0h1m1 0h1m3 0h4m1 0h1m-29 1h1m5 0h1m1 0h1m3 0h1m1 0h2m1 0h1m1 0h1m1 0h3m3 0h1m-28 1h7m3 0h2m1 0h1m2 0h2m1 0h2m1 0h1m1 0h1m2 0h2"/></svg><span>Scan to watch on your phone<br><b>Example 6 · 4:40</b></span></a>
     </aside>
   </div>
-  <div class="tryit">
+  <div class="tryit" id="try6" data-try="6">
     <p class="tag">Try It<span>#6</span></p>
     <div>
       <p>Write $4x^2+y^2-24x+2y+21=0$ in standard form. Identify the center, vertices, co-vertices, and foci.</p>
+      <details class="hint"><summary>Need a hint?</summary><div class="ans-body">Group the $x$ terms and the $y$ terms and move $21$ to the right side. Factor $4$ out of the $x$ group, complete the square in each group, and add the same amounts to the right side. Then divide so the right side is $1$.</div></details>
       <details class="ans" data-label="Try It #6"><summary>Check your answer</summary><div class="ans-body">$\dfrac{(x-3)^2}{4}+\dfrac{(y+1)^2}{16}=1$. Center $(3,-1)$; vertices $(3,-5)$ and $(3,3)$; co-vertices $(1,-1)$ and $(5,-1)$; foci $\left(3,\,-1\pm2\sqrt3\right)$.</div></details>
     </div>
   </div>
@@ -756,10 +952,11 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
       <a class="qr" href="https://youtu.be/LoTrHAr-tUg" target="_blank" rel="noopener"><svg role="img" aria-label="QR code: Example 7 video" viewBox="0 0 33 33" class="qr-svg"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#14181f" d="M2 2.5h7m1 0h6m4 0h3m1 0h7m-29 1h1m5 0h1m2 0h1m2 0h1m2 0h2m3 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m4 0h2m1 0h2m4 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h3m3 0h1m1 0h1m2 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h2m2 0h2m3 0h2m1 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h5m2 0h3m2 0h1m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-20 1h1m3 0h4m2 0h2m-20 1h7m2 0h1m1 0h3m1 0h1m1 0h3m2 0h2m3 0h1m-29 1h3m1 0h1m2 0h2m1 0h1m1 0h1m3 0h1m1 0h1m1 0h2m1 0h4m1 0h1m-28 1h1m1 0h1m2 0h4m3 0h2m6 0h2m1 0h1m-24 1h1m1 0h2m3 0h2m1 0h2m1 0h2m2 0h1m1 0h3m2 0h1m1 0h1m-28 1h1m1 0h1m2 0h4m2 0h1m1 0h5m3 0h1m1 0h1m2 0h3m-29 1h1m1 0h2m8 0h1m1 0h1m4 0h4m1 0h2m1 0h1m-28 1h3m1 0h1m1 0h3m1 0h3m2 0h2m1 0h1m1 0h2m1 0h1m-21 1h3m2 0h2m2 0h2m4 0h1m5 0h2m2 0h1m-29 1h1m3 0h1m1 0h1m1 0h7m3 0h3m3 0h3m1 0h1m-29 1h1m1 0h3m2 0h3m1 0h2m1 0h3m1 0h3m1 0h7m-29 1h1m2 0h1m1 0h4m1 0h2m2 0h1m5 0h1m1 0h1m2 0h2m-27 1h1m3 0h1m4 0h1m1 0h1m2 0h1m1 0h1m3 0h1m1 0h1m1 0h2m1 0h1m-28 1h1m1 0h5m1 0h1m2 0h1m2 0h1m2 0h9m2 0h1m-21 1h1m5 0h1m1 0h5m3 0h2m1 0h2m-29 1h7m1 0h3m1 0h1m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m2 0h1m-28 1h1m5 0h1m1 0h1m8 0h4m3 0h2m-26 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h4m3 0h7m-27 1h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h1m1 0h5m1 0h1m1 0h1m-26 1h1m1 0h3m1 0h1m1 0h1m1 0h2m2 0h4m1 0h6m2 0h1m-28 1h1m5 0h1m1 0h1m3 0h4m2 0h1m1 0h2m2 0h2m1 0h1m-28 1h7m2 0h1m3 0h3m1 0h1m3 0h2m1 0h3"/></svg><span>Scan to watch on your phone<br><b>Example 7 · 2:45</b></span></a>
     </aside>
   </div>
-  <div class="tryit">
+  <div class="tryit" id="try7" data-try="7">
     <p class="tag">Try It<span>#7</span></p>
     <div>
       <p>A whispering chamber is 480 feet long and 320 feet wide. <b>(a)</b> Write the standard form equation of the room, centered at $(0,0)$ with the long side horizontal. <b>(b)</b> Two people stand at the foci. How far apart are they, to the nearest foot?</p>
+      <details class="hint"><summary>Need a hint?</summary><div class="ans-body">The length is the major axis, so $a$ is half of $480$ and $b$ is half of $320$. The people stand at the foci, $(\pm c, 0)$, so the distance between them is $2c$, where $c^2 = a^2 - b^2$.</div></details>
       <details class="ans" data-label="Try It #7"><summary>Check your answer</summary><div class="ans-body"><b>(a)</b> $\dfrac{x^2}{57{,}600}+\dfrac{y^2}{25{,}600}=1$, from $a=240$ and $b=160$. <b>(b)</b> $c^2=57{,}600-25{,}600=32{,}000$, so $c\approx178.9$ and the people stand about 358 feet apart.</div></details>
     </div>
   </div>
@@ -769,12 +966,12 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
 <section class="sec" id="mistakes">
   <div class="sec-head"><h2 class="big">Six mistakes to avoid</h2></div>
   <ul class="mistakes">
-    <li><span class="no">Using $c^2=a^2+b^2$</span>That's the hyperbola in 8.2. In an ellipse the foci are inside, so $c$ is shorter than $a$: $c^2=a^2-b^2$.</li>
-    <li><span class="no">Assuming $a^2$ goes under $x$</span>$a^2$ is the bigger denominator, wherever it sits.</li>
-    <li><span class="no">Forgetting to flip the sign</span>$(y+3)^2$ means $k=-3$, not $3$.</li>
-    <li><span class="no">Stepping out $a^2$ instead of $a$</span>In $\dfrac{y^2}{25}$, the vertices are 5 units from the center, not 25.</li>
-    <li><span class="no">Adding 25 instead of $4\cdot25$</span>After factoring out 4, the amount added to the right side is $4\cdot25$.</li>
-    <li><span class="no">Reading $a^2$ before the right side is 1</span>In $4x^2+25y^2=100$, divide every term by 100 first. The denominators are 25 and 4, not 4 and 25.</li>
+    <li><span class="no">Using $c^2=a^2+b^2$</span>That's the hyperbola in 8.2. In an ellipse the foci are inside, so $c$ is shorter than $a$: $c^2=a^2-b^2$.<br><a class="stuck see" href="#parts">See the triangle</a></li>
+    <li><span class="no">Assuming $a^2$ goes under $x$</span>$a^2$ is the bigger denominator, wherever it sits.<br><a class="stuck see" href="#ex3">See Example 3</a></li>
+    <li><span class="no">Forgetting to flip the sign</span>$(y+3)^2$ means $k=-3$, not $3$.<br><a class="stuck see" href="#ex5">See Example 5</a></li>
+    <li><span class="no">Stepping out $a^2$ instead of $a$</span>In $\dfrac{y^2}{25}$, the vertices are 5 units from the center, not 25.<br><a class="stuck see" href="#ex3">See Example 3</a></li>
+    <li><span class="no">Adding 25 instead of $4\cdot25$</span>After factoring out 4, the amount added to the right side is $4\cdot25$.<br><a class="stuck see" href="#ex6">See Example 6</a></li>
+    <li><span class="no">Reading $a^2$ before the right side is 1</span>In $4x^2+25y^2=100$, divide every term by 100 first. The denominators are 25 and 4, not 4 and 25.<br><a class="stuck see" href="#ex4">See Example 4</a></li>
   </ul>
 </section>
 
@@ -797,7 +994,7 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
 <!-- ============ PRACTICE ============ -->
 <section class="sec" id="practice">
   <div class="sec-head"><h2 class="big">Practice: the core set</h2></div>
-  <p class="sec-intro">Fourteen problems from the book's 68, covering every skill. Numbers match the OpenStax exercise list. Stuck? Each group links to the video that shows the method.</p>
+  <p class="sec-intro">Fourteen problems from the book's 68, covering every skill. Numbers match the OpenStax exercise list. Stuck? Each group links to the video that shows the method. Check one answer at a time.</p>
   <div class="practice">
     <div class="pset">
       <header><h3>A · Write the equation</h3><a class="stuck" href="#ex1">Stuck? Examples 1–2</a></header>
@@ -876,6 +1073,7 @@ footer.cite{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);fo
 <section class="print-key" id="answer-key"><h2 class="big">Answers</h2><div id="keyList"></div></section>
 
 <footer class="cite">
+  <p>Your checkmarks are saved in this browser only. <button type="button" class="linkbtn" id="resetProg">Clear my checkmarks</button></p>
   <p>Adapted from Jay Abramson, <i>College Algebra 2e</i>, Section 8.1 “The Ellipse,” OpenStax, licensed under CC BY 4.0. Access the original for free at <a href="https://openstax.org/books/college-algebra-2e/pages/8-1-the-ellipse" target="_blank" rel="noopener">openstax.org</a>.</p>
   <p>Rewritten and redesigned by Timely Math Tutor, with a video for every example. Not an official OpenStax publication.</p>
 </footer>
@@ -1050,12 +1248,204 @@ function rays(svg,cx,cy,rx,ry,angles,g){
   tx(cx-c-2,cy+26,'visitor','t-f','start');tx(cx+c+2,cy+26,'visitor','t-f','end');
 })();
 
+
+/* ================= v2: study tools ================= */
+const $=(s,r)=>(r||document).querySelector(s),$$=(s,r)=>[...(r||document).querySelectorAll(s)];
+
+/* keep a period or comma on the same line as the math before it */
+window.fixPunct=function(root){
+  $$('mjx-container:not([display="true"])',root).forEach(m=>{
+    const t=m.nextSibling;if(!t||t.nodeType!==3||m.parentNode.classList.contains('nwp'))return;
+    const mt=t.nodeValue.match(/^[.,;:!?)]+/);if(!mt)return;
+    const s=document.createElement('span');s.className='nw nwp';m.parentNode.insertBefore(s,m);
+    s.appendChild(m);s.appendChild(document.createTextNode(mt[0]));t.nodeValue=t.nodeValue.slice(mt[0].length);
+  });
+};
+/* typeset one element again after its text changes */
+let mjq=Promise.resolve();
+function setMath(el,html){
+  const ready=window.MathJax&&MathJax.typesetPromise;
+  if(ready&&MathJax.typesetClear)MathJax.typesetClear([el]);
+  el.innerHTML=html;
+  if(ready)mjq=mjq.then(()=>MathJax.typesetPromise([el])).then(()=>window.fixPunct(el)).catch(()=>{});
+}
+
+/* progress: saved in this browser only */
+const KEY='oca-8.1-progress',SK={a:[1,2],b:[3,4,5],c:[6],d:[7]},ALL=[1,2,3,4,5,6,7];
+let prog={t:{},p:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.t&&s.p)prog=s}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(prog))}catch(e){}};
+function paint(){
+  $$('.tryit').forEach(t=>{const on=!!prog.t[t.dataset.try];t.classList.toggle('done',on);
+    const b=$('.got',t);if(b){b.setAttribute('aria-pressed',on);b.textContent=on?'✓ Got it':'I got it';}});
+  for(const k in SK){const el=$('.skills a[href="#skill-'+k+'"] .tick');if(!el)continue;
+    const d=SK[k].filter(n=>prog.t[n]).length,all=d===SK[k].length;
+    el.textContent=all?(d>1?'✓ Try Its done':'✓ Try It done'):d+' of '+SK[k].length+(SK[k].length>1?' Try Its done':' Try It done');el.classList.toggle('all',all);}
+  const chip=$('#progChip');
+  if(chip){const done=ALL.filter(n=>prog.t[n]).length,next=ALL.find(n=>!prog.t[n]);
+    chip.innerHTML='<span class="lbl">Try Its </span>'+done+'/7';chip.classList.toggle('all',!next);
+    chip.href=next?'#try'+next:'#practice';chip.title=next?'Go to Try It #'+next:'Every Try It is done. Go to the practice set.';}
+  $$('.pset ol>li').forEach(li=>{const on=!!prog.p[li.dataset.pk];li.classList.toggle('done',on);
+    const b=$('.pa-done',li);if(b){b.setAttribute('aria-pressed',on);b.textContent=on?'✓ Done':'Mark done';}});
+}
+$$('.skills a').forEach(a=>{const s=document.createElement('span');s.className='tick';a.appendChild(s)});
+
+/* Try It: the "I got it" row appears once the answer is open */
+$$('.tryit').forEach(t=>{
+  const n=t.dataset.try,ans=$('details.ans',t);if(!n||!ans)return;
+  const row=document.createElement('div');row.className='rate';row.hidden=!ans.open;
+  row.innerHTML='<button type="button" class="btn got" aria-pressed="false">I got it</button><a href="#ex'+n+'">Not yet? Back to Example '+n+'</a>';
+  ans.after(row);
+  ans.addEventListener('toggle',()=>{if(ans.open)row.hidden=false});
+  $('.got',row).addEventListener('click',()=>{prog.t[n]=!prog.t[n];save();paint()});
+});
+
+/* worked examples: reveal one step at a time */
+$$('.ex-card').forEach(card=>{
+  const steps=$$('.steps>li',card),sol=$('.sol',card),extras=[$('.ex-fig',card),$('.callout',card)].filter(Boolean);
+  if(steps.length<2||!sol)return;
+  const btn=document.createElement('button');btn.type='button';btn.className='step-btn';btn.textContent='One step at a time';
+  $('.ex-head',card).appendChild(btn);
+  const ctl=document.createElement('div');ctl.className='step-ctl';
+  ctl.innerHTML='<button type="button" class="btn solid nx">Next step</button><button type="button" class="btn all">Show all</button><span class="cnt" aria-live="polite"></span>';
+  sol.appendChild(ctl);
+  let on=false,shown=steps.length;
+  function draw(){
+    const end=!on||shown>=steps.length;
+    steps.forEach((li,i)=>li.classList.toggle('step-off',on&&i>=shown));
+    extras.forEach(e=>e.classList.toggle('step-off',!end));
+    ctl.hidden=!on;btn.setAttribute('aria-pressed',on);
+    $('.nx',ctl).textContent=end?'Start over':'Next step';
+    $('.cnt',ctl).textContent=end?'That’s every step.':'Step '+shown+' of '+steps.length+'. Predict the next one, then check.';
+  }
+  btn.addEventListener('click',()=>{on=!on;shown=on?1:steps.length;draw()});
+  $('.nx',ctl).addEventListener('click',()=>{shown=shown>=steps.length?1:shown+1;draw()});
+  $('.all',ctl).addEventListener('click',()=>{on=false;shown=steps.length;draw()});
+  draw();
+});
+
+/* build an ellipse: the equation and the graph move together */
+const xyPart=(v,c,col)=>c===0?v+'^2':'('+v+(c>0?'-':'+')+(col?'\\kh{'+Math.abs(c)+'}':Math.abs(c))+')^2';
+(function(){
+  const svg=$('#labFig');if(!svg)return;
+  const F=frame(svg,{x:[-10,10],y:[-10,10],u:15,pad:24}),dyn=mk('g',{},svg);
+  const P=$('#labP'),Q=$('#labQ'),H=$('#labH'),K=$('#labK');
+  const root=n=>{let o=1,i=n;for(let d=2;d*d<=i;d++)while(i%(d*d)===0){o*=d;i/=d*d}return i===1?''+o:(o===1?'':o)+'\\sqrt{'+i+'}'};
+  const pt=(x,y)=>'({'+x+'},\\ {'+y+'})';
+  const pm=(base,r)=>base===0?'{\\pm}'+r:'{'+base+'}\\pm'+r;
+  function update(){
+    const rx=+P.value,ry=+Q.value,h=+H.value,k=+K.value,p=rx*rx,q=ry*ry;
+    $('#labPo').textContent=p;$('#labQo').textContent=q;$('#labHo').textContent=String(h).replace('-','−');$('#labKo').textContent=String(k).replace('-','−');
+    const circ=rx===ry,horiz=rx>ry,a=Math.max(rx,ry),b=Math.min(rx,ry),c2=a*a-b*b,c=Math.sqrt(c2),whole=Number.isInteger(c);
+    const cx=circ?'':horiz?'\\ka':'\\kb',cy=circ?'':horiz?'\\kb':'\\ka';
+    setMath($('#labEq'),'$$\\frac{'+xyPart('x',h,1)+'}{'+cx+'{'+p+'}}+\\frac{'+xyPart('y',k,1)+'}{'+cy+'{'+q+'}}=1$$');
+    const ctr='$\\kh{'+pt(h,k)+'}$';
+    let dir,facts;
+    if(circ){
+      dir='<b>A circle.</b> Both denominators are $'+p+'$, so $a=b='+a+'$ and $\\kc{c}=0$. The two foci land on the center.';
+      facts=[['k-h','Center',ctr],['k-a','Radius','$'+a+'$'],['k-c','Foci','both at the center']];
+    }else{
+      const v=horiz?'x':'y';
+      dir='<b>'+(horiz?'Horizontal':'Vertical')+'.</b> $\\ka{'+a*a+'}>\\kb{'+b*b+'}$, and the bigger number is under the $'+v+'$ part, so $\\ka{a}='+a+'$ runs '+(horiz?'left and right':'up and down')+'. Then $\\kb{b}='+b+'$ and $\\kc{c}=\\sqrt{'+a*a+'-'+b*b+'}='+root(c2)+'$.';
+      const along=(d)=>horiz?'$'+pt(h-d,k)+'$ and $'+pt(h+d,k)+'$':'$'+pt(h,k-d)+'$ and $'+pt(h,k+d)+'$';
+      const across=(d)=>horiz?'$'+pt(h,k-d)+'$ and $'+pt(h,k+d)+'$':'$'+pt(h-d,k)+'$ and $'+pt(h+d,k)+'$';
+      const foci=whole?along(c):horiz?'$\\left('+pm(h,root(c2))+',\\ {'+k+'}\\right)$':'$\\left({'+h+'},\\ '+pm(k,root(c2))+'\\right)$';
+      facts=[['k-h','Center',ctr],['k-a','Vertices',along(a)],['k-b','Co-vertices',across(b)],['k-c','Foci',foci]];
+    }
+    setMath($('#labDir'),dir);
+    setMath($('#labFacts'),facts.map(f=>'<li><span class="'+f[0]+'">'+f[1]+'</span><span>'+f[2]+'</span></li>').join(''));
+    dyn.replaceChildren();
+    ellipse(dyn,F,{h,k,a,b,vert:!horiz&&!circ,axes:!circ});
+    const list=[['c',h,k,'','']];
+    if(!circ){const dx=horiz?1:0,dy=horiz?0:1;
+      for(const s of[-1,1]){list.push(['v',h+s*a*dx,k+s*a*dy,'',''],['cv',h+s*b*dy,k+s*b*dx,'',''],['f',h+s*c*dx,k+s*c*dy,'','']);}}
+    points(dyn,F,list);
+  }
+  [P,Q,H,K].forEach(i=>i.addEventListener('input',update));
+  update();
+})();
+
+/* quick check: which way does it stretch? */
+(function(){
+  const box=$('#qc');if(!box)return;
+  const eq=$('#qcEq'),fb=$('#qcFb'),btns=$$('.qc-btns .btn',box),nx=$('#qcNext'),sc=$('#qcScore');
+  const SQ=[4,9,16,25,36,49,64,81],ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+  let cur={p:9,q:25,h:-2,k:1},streak=0,answered=false;
+  function ask(o){cur=o;answered=false;btns.forEach(b=>{b.disabled=false;b.classList.remove('right','wrong')});fb.textContent='';nx.hidden=true;
+    setMath(eq,'$$\\frac{'+xyPart('x',o.h)+'}{'+o.p+'}+\\frac{'+xyPart('y',o.k)+'}{'+o.q+'}=1$$');}
+  btns.forEach(b=>b.addEventListener('click',()=>{
+    if(answered)return;answered=true;
+    const truth=cur.p>cur.q?'h':'v',ok=b.dataset.a===truth,big=Math.max(cur.p,cur.q);
+    streak=ok?streak+1:0;
+    btns.forEach(x=>{x.disabled=true;if(x.dataset.a===truth)x.classList.add('right')});if(!ok)b.classList.add('wrong');
+    setMath(fb,(ok?'<b class="ok">Right.</b> ':'<b class="no">Not this one.</b> ')+'$\\ka{'+big+'}$ is the bigger denominator and it sits under the $'+(truth==='h'?'x':'y')+'$ part, so the ellipse is '+(truth==='h'?'horizontal':'vertical')+' with $\\ka{a}='+Math.sqrt(big)+'$. The center is $\\kh{({'+cur.h+'},\\ {'+cur.k+'})}$.');
+    sc.textContent=streak?streak+' right in a row':'';nx.hidden=false;
+  }));
+  nx.addEventListener('click',()=>{let p=SQ[ri(0,7)],q;do{q=SQ[ri(0,7)]}while(q===p);ask({p,q,h:ri(-5,5),k:ri(-5,5)})});
+})();
+
+/* section bar: current section, reading progress, formulas */
+(function(){
+  const bar=$('.secbar');if(!bar)return;
+  const nav=$('.secnav',bar),links=$$('a',nav),secs=links.map(a=>$(a.getAttribute('href'))),line=$('#progLine');
+  let cur=-1,tick=false;
+  function upd(){tick=false;
+    const off=bar.getBoundingClientRect().bottom+28;let i=-1;
+    secs.forEach((s,j)=>{if(s&&s.getBoundingClientRect().top<=off)i=j});
+    if(bar.getBoundingClientRect().top>(parseFloat(getComputedStyle(bar).top)||0)+1)i=-1;
+    if(i!==cur){cur=i;links.forEach((a,j)=>{if(j===i)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')});
+      if(i>=0){const a=links[i];nav.scrollLeft=a.offsetLeft-nav.clientWidth/2+a.offsetWidth/2;}}
+    const max=document.documentElement.scrollHeight-innerHeight;
+    line.style.width=(max>0?Math.min(1,scrollY/max)*100:0)+'%';
+  }
+  addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});
+  addEventListener('resize',upd);upd();
+  const fb=$('#fxBtn'),fx=$('#fxPanel');
+  const openFx=on=>{fx.dataset.open=on;fb.setAttribute('aria-expanded',on)};
+  fb.addEventListener('click',e=>{e.stopPropagation();openFx(fx.dataset.open!=='true')});
+  document.addEventListener('click',e=>{if(fx.dataset.open==='true'&&!fx.contains(e.target))openFx(false)});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')openFx(false)});
+  $$('a',fx).forEach(a=>a.addEventListener('click',()=>openFx(false)));
+})();
+
+/* light or dark: dark unless the reader picks light; the choice is shared by every page on the site */
+const tb=$('#themeBtn');
+if(tb){const root=document.documentElement,isLight=()=>root.getAttribute('data-theme')==='light',lab=()=>{tb.textContent=isLight()?'Dark mode':'Light mode'};
+  tb.addEventListener('click',()=>{const n=isLight()?'dark':'light';root.setAttribute('data-theme',n);try{localStorage.setItem('tm-theme',n)}catch(e){}lab()});lab();}
+
+const rp=$('#resetProg');
+if(rp)rp.addEventListener('click',()=>{prog={t:{},p:{}};save();paint();rp.textContent='Checkmarks cleared';setTimeout(()=>rp.textContent='Clear my checkmarks',1800)});
+
+/* after the math is typeset: tidy punctuation, then give each practice problem its own answer */
+window.afterMath=function(){
+  window.fixPunct();
+  $$('.pset').forEach((ps,gi)=>{
+    const probs=$$(':scope>ol>li',ps),det=$(':scope>details.ans',ps);if(!det)return;
+    const ans=$$('.ans-list>li',det);if(ans.length!==probs.length)return;
+    probs.forEach((li,i)=>{
+      li.dataset.pk=gi+':'+$('.n',li).textContent.trim();
+      const lab=$(':scope>b',ans[i]);if(lab)lab.remove();
+      const row=document.createElement('div');row.className='pa-row';
+      const b=document.createElement('button');b.type='button';b.className='pa-btn';b.setAttribute('aria-expanded','false');b.textContent='Show answer';
+      const d=document.createElement('button');d.type='button';d.className='pa-done';d.setAttribute('aria-pressed','false');d.textContent='Mark done';
+      const box=document.createElement('div');box.className='pa';box.hidden=true;
+      while(ans[i].firstChild)box.appendChild(ans[i].firstChild);
+      b.addEventListener('click',()=>{box.hidden=!box.hidden;b.setAttribute('aria-expanded',!box.hidden);b.textContent=box.hidden?'Show answer':'Hide answer'});
+      d.addEventListener('click',()=>{const k=li.dataset.pk;prog.p[k]=!prog.p[k];save();paint()});
+      row.append(b,d);li.lastElementChild.append(row,box);
+    });
+    det.remove();
+  });
+  paint();
+};
+paint();
+
 /* design-notes toggle */
 const tg=document.getElementById('notesToggle');
 if(tg){
-  const setNotes=on=>{document.documentElement.classList.toggle('show-notes',on);tg.setAttribute('aria-pressed',on);tg.textContent=on?'Hide what changed':'Show what changed';};
-  tg.addEventListener('click',()=>{const on=!document.documentElement.classList.contains('show-notes');setNotes(on);try{localStorage.setItem('ellipse-notes',on?'1':'0')}catch(e){}});
-  try{if(localStorage.getItem('ellipse-notes')==='1')setNotes(true)}catch(e){}
+  const setNotes=on=>{document.documentElement.classList.toggle('show-notes',on);tg.setAttribute('aria-pressed',on);tg.textContent=on?'Hide the notes':'Show the notes';};
+  tg.addEventListener('click',()=>{const on=!document.documentElement.classList.contains('show-notes');setNotes(on);try{localStorage.setItem('compendium-v2-notes',on?'1':'0')}catch(e){}});
+  let nOn=true;try{if(localStorage.getItem('compendium-v2-notes')==='0')nOn=false}catch(e){}setNotes(nOn);
   if(/[?&]notes/.test(location.search))setNotes(true);
 }
 
@@ -1074,7 +1464,7 @@ window.MathJax={
     macros:{ka:['\\class{ka}{#1}',1],kb:['\\class{kb}{#1}',1],kc:['\\class{kc}{#1}',1],kh:['\\class{kh}{#1}',1],kn:['\\class{kn}{#1}',1]}},
   svg:{fontCache:'global'},
   options:{skipHtmlTags:['script','noscript','style','textarea','pre','code','svg']},
-  startup:{pageReady:()=>MathJax.startup.defaultPageReady().then(()=>{window.buildKey&&window.buildKey();document.documentElement.classList.add('math-ready')})}
+  startup:{pageReady:()=>MathJax.startup.defaultPageReady().then(()=>{window.buildKey&&window.buildKey();window.afterMath&&window.afterMath();document.documentElement.classList.add('math-ready')})}
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
