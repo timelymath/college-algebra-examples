@@ -91,7 +91,7 @@ The 8.1 page (`8.1/compendium/`) is the model. Build each new one from its sourc
 **Study tools every compendium has.**
 
 - Worked examples: a "One step at a time" button hides the steps (and the figure) so students predict each step before revealing it. Everything is shown by default.
-- Try It: a hint first (the same hint as `try_it.hint` in `course.yaml`), then the answer, then "I got it" and "Not yet? Back to Example n". "I got it" feeds the counts in the section bar and on the path cards.
+- Try It: a hint first (the same hint as `try_it.hint` in `course.yaml`), then the answer, then "I got it" and "Not yet? Back to Example n". "I got it" feeds the counts in the section bar and on the path cards. Keep the math items apart: an answer that lists several results (center, vertices, co-vertices, foci; or (a) and (b)) goes in a `.row` of spans, which spaces them out and wraps on phones, and the working goes in a `.why` line below it, also as a `.row`. Two math items joined by "and" in a problem, hint or answer use `<span class="and">and</span>` for a wider gap; leave "and" plain when it joins clauses of a sentence (Dan, 2026-11-20).
 - Practice: answers open one problem at a time, and each problem has "Mark done". In the template the answers stay grouped in one `<details class="ans">` per set; the page splits them up after the math is typeset, and the printed answer key is built from the same lists.
 - Progress is saved in the student's browser only (`localStorage`, key `oca-<s>-progress`). Change the key and the skill-to-Try-It map (`SK`) in the script for each section.
 

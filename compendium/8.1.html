@@ -240,6 +240,10 @@ details.ans>summary{font-family:var(--f-ui);cursor:pointer;font-weight:700;color
 details.ans .ans-body{margin-top:6px;padding:10px 14px;border-radius:10px;background:var(--paper);font-size:.96rem}
 details.ans .ans-body ul{margin:4px 0 0;padding-left:1.2em}
 .why{color:var(--muted);font-size:.92rem;margin-top:4px}
+.tryit .row{display:flex;flex-wrap:wrap;column-gap:1.75em;row-gap:6px;align-items:baseline}
+.tryit .why .row{column-gap:1.4em}
+.tryit .and{margin:0 .5em}
+.tryit .ans-body>.row:not(:first-child){margin-top:6px}
 
 /* mistakes and summary */
 .mistakes{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}
@@ -720,9 +724,9 @@ details.hint .ans-body{margin-top:6px;padding:10px 14px;border-radius:10px;backg
   <div class="tryit" id="try1" data-try="1">
     <p class="tag">Try It<span>#1</span></p>
     <div>
-      <p>What is the standard form equation of the ellipse that has vertices $(0,\,\pm4)$ and foci $\left(0,\,\pm\sqrt{15}\right)$?</p>
+      <p>What is the standard form equation of the ellipse that has vertices $(0,\,\pm4)$ <span class="and">and</span> foci $\left(0,\,\pm\sqrt{15}\right)$?</p>
       <details class="hint"><summary>Need a hint?</summary><div class="ans-body">The vertices and foci are on the $y$-axis, so the major axis is vertical. Start from $\dfrac{x^2}{b^2} + \dfrac{y^2}{a^2} = 1$, read $a$ off the vertices and $c$ off the foci, then use $c^2 = a^2 - b^2$ to find $b^2$.</div></details>
-      <details class="ans" data-label="Try It #1"><summary>Check your answer</summary><div class="ans-body">$x^2+\dfrac{y^2}{16}=1$<p class="why">Vertical, $a=4$, $c=\sqrt{15}$, so $15=16-b^2$ and $b^2=1$.</p></div></details>
+      <details class="ans" data-label="Try It #1"><summary>Check your answer</summary><div class="ans-body">$x^2+\dfrac{y^2}{16}=1$<p class="why"><span class="row"><span>Vertical</span><span>$a=4$</span><span>$c=\sqrt{15}$</span><span>$15=16-b^2$, so $b^2=1$</span></span></p></div></details>
     </div>
   </div>
 
@@ -752,9 +756,9 @@ details.hint .ans-body{margin-top:6px;padding:10px 14px;border-radius:10px;backg
   <div class="tryit" id="try2" data-try="2">
     <p class="tag">Try It<span>#2</span></p>
     <div>
-      <p>What is the standard form equation of the ellipse that has vertices $(-3,3)$ and $(5,3)$ and foci $\left(1-2\sqrt3,\,3\right)$ and $\left(1+2\sqrt3,\,3\right)$?</p>
+      <p>What is the standard form equation of the ellipse that has vertices $(-3,3)$ <span class="and">and</span> $(5,3)$, and foci $\left(1-2\sqrt3,\,3\right)$ <span class="and">and</span> $\left(1+2\sqrt3,\,3\right)$?</p>
       <details class="hint"><summary>Need a hint?</summary><div class="ans-body">The vertices share $y = 3$, so the major axis is horizontal: $\dfrac{(x-h)^2}{a^2} + \dfrac{(y-k)^2}{b^2} = 1$. The center is the midpoint of the vertices, $a$ is the distance from the center to a vertex, and $c$ is the distance from the center to a focus.</div></details>
-      <details class="ans" data-label="Try It #2"><summary>Check your answer</summary><div class="ans-body">$\dfrac{(x-1)^2}{16}+\dfrac{(y-3)^2}{4}=1$<p class="why">Center $(1,3)$, $a=4$, $c=2\sqrt3$, so $12=16-b^2$ and $b^2=4$.</p></div></details>
+      <details class="ans" data-label="Try It #2"><summary>Check your answer</summary><div class="ans-body">$\dfrac{(x-1)^2}{16}+\dfrac{(y-3)^2}{4}=1$<p class="why"><span class="row"><span>Center $(1,3)$</span><span>$a=4$</span><span>$c=2\sqrt3$</span><span>$12=16-b^2$, so $b^2=4$</span></span></p></div></details>
     </div>
   </div>
 </section>
@@ -804,8 +808,8 @@ details.hint .ans-body{margin-top:6px;padding:10px 14px;border-radius:10px;backg
     <p class="tag">Try It<span>#3</span></p>
     <div>
       <p>Graph $\dfrac{x^2}{36}+\dfrac{y^2}{4}=1$. Identify and label the center, vertices, co-vertices, and foci.</p>
-      <details class="hint"><summary>Need a hint?</summary><div class="ans-body">The larger denominator, $36$, is under $x^2$, so the major axis is horizontal: $a^2 = 36$ and $b^2 = 4$. Then find $c$ from $c^2 = a^2 - b^2$.</div></details>
-      <details class="ans" data-label="Try It #3"><summary>Check your answer</summary><div class="ans-body">Center $(0,0)$; vertices $(\pm6,0)$; co-vertices $(0,\pm2)$; foci $\left(\pm4\sqrt2,\,0\right)$, since $c^2=36-4=32$.</div></details>
+      <details class="hint"><summary>Need a hint?</summary><div class="ans-body">The larger denominator, $36$, is under $x^2$, so the major axis is horizontal: $a^2 = 36$ <span class="and">and</span> $b^2 = 4$. Then find $c$ from $c^2 = a^2 - b^2$.</div></details>
+      <details class="ans" data-label="Try It #3"><summary>Check your answer</summary><div class="ans-body"><span class="row"><span>Center $(0,0)$</span><span>Vertices $(\pm6,0)$</span><span>Co-vertices $(0,\pm2)$</span><span>Foci $\left(\pm4\sqrt2,\,0\right)$</span></span><p class="why">$c^2=36-4=32$, so $c=4\sqrt2$.</p></div></details>
     </div>
   </div>
 
@@ -841,7 +845,7 @@ details.hint .ans-body{margin-top:6px;padding:10px 14px;border-radius:10px;backg
     <div>
       <p>Graph $49x^2+16y^2=784$. Rewrite the equation in standard form, then identify and label the center, vertices, co-vertices, and foci.</p>
       <details class="hint"><summary>Need a hint?</summary><div class="ans-body">Standard form has $1$ on the right side, so divide every term by $784$ and simplify each fraction. Then the larger denominator tells you which way the ellipse stretches.</div></details>
-      <details class="ans" data-label="Try It #4"><summary>Check your answer</summary><div class="ans-body">$\dfrac{x^2}{16}+\dfrac{y^2}{49}=1$. Center $(0,0)$; vertices $(0,\pm7)$; co-vertices $(\pm4,0)$; foci $\left(0,\pm\sqrt{33}\right)$, since $c^2=49-16=33$.</div></details>
+      <details class="ans" data-label="Try It #4"><summary>Check your answer</summary><div class="ans-body">$\dfrac{x^2}{16}+\dfrac{y^2}{49}=1$<span class="row"><span>Center $(0,0)$</span><span>Vertices $(0,\pm7)$</span><span>Co-vertices $(\pm4,0)$</span><span>Foci $\left(0,\pm\sqrt{33}\right)$</span></span><p class="why">$c^2=49-16=33$, so $c=\sqrt{33}$.</p></div></details>
     </div>
   </div>
 
@@ -877,7 +881,7 @@ details.hint .ans-body{margin-top:6px;padding:10px 14px;border-radius:10px;backg
     <div>
       <p>Graph $\dfrac{(x-4)^2}{36}+\dfrac{(y-2)^2}{20}=1$. Identify and label the center, vertices, co-vertices, and foci.</p>
       <details class="hint"><summary>Need a hint?</summary><div class="ans-body">The center is $(h, k) = (4, 2)$. The larger denominator, $36$, is under the $x$ part, so $a = 6$ runs left and right from the center, and $b = \sqrt{20} = 2\sqrt{5}$ runs up and down.</div></details>
-      <details class="ans" data-label="Try It #5"><summary>Check your answer</summary><div class="ans-body">Center $(4,2)$; vertices $(-2,2)$ and $(10,2)$; co-vertices $\left(4,\,2\pm2\sqrt5\right)$; foci $(0,2)$ and $(8,2)$, since $c^2=36-20=16$.</div></details>
+      <details class="ans" data-label="Try It #5"><summary>Check your answer</summary><div class="ans-body"><span class="row"><span>Center $(4,2)$</span><span>Vertices $(-2,2)$ <span class="and">and</span> $(10,2)$</span><span>Co-vertices $\left(4,\,2\pm2\sqrt5\right)$</span><span>Foci $(0,2)$ <span class="and">and</span> $(8,2)$</span></span><p class="why">$c^2=36-20=16$, so $c=4$.</p></div></details>
     </div>
   </div>
 </section>
@@ -921,8 +925,8 @@ details.hint .ans-body{margin-top:6px;padding:10px 14px;border-radius:10px;backg
     <p class="tag">Try It<span>#6</span></p>
     <div>
       <p>Write $4x^2+y^2-24x+2y+21=0$ in standard form. Identify the center, vertices, co-vertices, and foci.</p>
-      <details class="hint"><summary>Need a hint?</summary><div class="ans-body">Group the $x$ terms and the $y$ terms and move $21$ to the right side. Factor $4$ out of the $x$ group, complete the square in each group, and add the same amounts to the right side. Then divide so the right side is $1$.</div></details>
-      <details class="ans" data-label="Try It #6"><summary>Check your answer</summary><div class="ans-body">$\dfrac{(x-3)^2}{4}+\dfrac{(y+1)^2}{16}=1$. Center $(3,-1)$; vertices $(3,-5)$ and $(3,3)$; co-vertices $(1,-1)$ and $(5,-1)$; foci $\left(3,\,-1\pm2\sqrt3\right)$.</div></details>
+      <details class="hint"><summary>Need a hint?</summary><div class="ans-body">Group the $x$ terms and the $y$ terms, and move $21$ to the right side. Factor $4$ out of the $x$ group, complete the square in each group, and add the same amounts to the right side. Then divide so the right side is $1$.</div></details>
+      <details class="ans" data-label="Try It #6"><summary>Check your answer</summary><div class="ans-body">$\dfrac{(x-3)^2}{4}+\dfrac{(y+1)^2}{16}=1$<span class="row"><span>Center $(3,-1)$</span><span>Vertices $(3,-5)$ <span class="and">and</span> $(3,3)$</span><span>Co-vertices $(1,-1)$ <span class="and">and</span> $(5,-1)$</span><span>Foci $\left(3,\,-1\pm2\sqrt3\right)$</span></span></div></details>
     </div>
   </div>
 </section>
@@ -957,7 +961,7 @@ details.hint .ans-body{margin-top:6px;padding:10px 14px;border-radius:10px;backg
     <div>
       <p>A whispering chamber is 480 feet long and 320 feet wide. <b>(a)</b> Write the standard form equation of the room, centered at $(0,0)$ with the long side horizontal. <b>(b)</b> Two people stand at the foci. How far apart are they, to the nearest foot?</p>
       <details class="hint"><summary>Need a hint?</summary><div class="ans-body">The length is the major axis, so $a$ is half of $480$ and $b$ is half of $320$. The people stand at the foci, $(\pm c, 0)$, so the distance between them is $2c$, where $c^2 = a^2 - b^2$.</div></details>
-      <details class="ans" data-label="Try It #7"><summary>Check your answer</summary><div class="ans-body"><b>(a)</b> $\dfrac{x^2}{57{,}600}+\dfrac{y^2}{25{,}600}=1$, from $a=240$ and $b=160$. <b>(b)</b> $c^2=57{,}600-25{,}600=32{,}000$, so $c\approx178.9$ and the people stand about 358 feet apart.</div></details>
+      <details class="ans" data-label="Try It #7"><summary>Check your answer</summary><div class="ans-body"><span class="row"><span><b>(a)</b>&ensp;$\dfrac{x^2}{57{,}600}+\dfrac{y^2}{25{,}600}=1$</span><span><b>(b)</b>&ensp;about 358 feet apart</span></span><p class="why"><span class="row"><span>$a=240$</span><span>$b=160$</span><span>$c^2=57{,}600-25{,}600=32{,}000$</span><span>$c\approx178.9$, so $2c\approx358$</span></span></p></div></details>
     </div>
   </div>
 </section>
